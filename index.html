@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CII — HCO Categorization Assessment v2.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+/* ============================================================
+   HCO ASSESSMENT v2.0 — EMBEDDED STYLES
+   ============================================================ */
+:root {
+  --cii-blue:#1a5fa8; --cii-blue-dark:#0f3d6e; --cii-blue-light:#dbeafe;
+  --cii-accent:#e8a020; --text-primary:#111827; --text-secondary:#4b5563;
+  --text-muted:#9ca3af; --border:#e5e7eb; --border-focus:#1a5fa8;
+  --bg-page:#f8fafc; --bg-card:#ffffff; --bg-section:#f1f5f9;
+  --radius:10px; --radius-lg:14px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08);
+  --shadow-md:0 4px 16px rgba(0,0,0,.10);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.14);
+  --font:'Inter',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg-page);color:var(--text-primary);min-height:100vh;font-size:15px;line-height:1.6;}
+
+/* HEADER */
+.site-header{background:var(--bg-card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm);}
+.header-inner{max-width:900px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.header-brand{display:flex;align-items:center;gap:16px;}
+.cii-logo-block{display:flex;align-items:center;gap:8px;}
+.cii-logo-box{background:var(--cii-blue);color:#fff;font-weight:700;font-size:13px;padding:5px 9px;border-radius:4px;letter-spacing:.05em;flex-shrink:0;}
+.cii-logo-box.sm{font-size:11px;padding:4px 7px;}
+.cii-logo-text{font-size:11px;line-height:1.4;color:var(--text-secondary);font-weight:500;}
+.header-divider{width:1px;height:36px;background:var(--border);}
+.header-tag{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--cii-accent);margin-bottom:2px;}
+.header-title{font-size:15px;font-weight:700;color:var(--cii-blue-dark);line-height:1.2;}
+.header-version{font-size:11px;color:var(--text-muted);font-family:var(--mono);}
+.score-pill{display:flex;flex-direction:column;align-items:center;background:var(--bg-section);border:1px solid var(--border);border-radius:8px;padding:6px 14px;min-width:64px;flex-shrink:0;}
+.score-pill-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);font-weight:600;}
+.score-pill-value{font-size:20px;font-weight:700;color:var(--cii-blue);font-family:var(--mono);line-height:1.2;}
+.progress-rail{height:3px;background:var(--border);}
+.progress-fill{height:3px;background:linear-gradient(90deg,var(--cii-blue),var(--cii-accent));width:0%;transition:width .4s ease;}
+
+/* INTRO BANNER */
+.intro-banner{background:linear-gradient(135deg,var(--cii-blue-dark) 0%,var(--cii-blue) 100%);color:#fff;padding:40px 24px;}
+.intro-inner{max-width:900px;margin:0 auto;display:flex;gap:40px;align-items:flex-start;}
+.intro-left{flex:1;}
+.intro-left h2{font-size:22px;font-weight:700;margin-bottom:10px;}
+.intro-left p{font-size:14px;opacity:.85;margin-bottom:24px;max-width:500px;}
+.scoring-legend{display:flex;flex-direction:column;gap:6px;}
+.legend-item{display:flex;align-items:center;gap:10px;font-size:13px;opacity:.9;}
+.badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:20px;border-radius:4px;font-size:11px;font-weight:700;flex-shrink:0;}
+.badge.a-star{background:#fef08a;color:#713f12;}
+.badge.a{background:#bbf7d0;color:#14532d;}
+.badge.b{background:#fed7aa;color:#7c2d12;}
+.badge.c{background:#fecaca;color:#7f1d1d;}
+.badge.d{background:#e5e7eb;color:#374151;}
+.intro-right{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex-shrink:0;}
+.weight-card{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:14px 16px;text-align:center;}
+.weight-num{font-size:28px;font-weight:800;font-family:var(--mono);color:var(--cii-accent);line-height:1;}
+.weight-label{font-size:11px;opacity:.8;margin-top:4px;line-height:1.3;}
+
+/* FORM */
+.form-main{max-width:900px;margin:0 auto;padding:32px 24px 80px;}
+.form-section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;box-shadow:var(--shadow-sm);}
+.form-section.hidden{display:none;}
+
+/* SECTION HEADER */
+.section-header{margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid var(--cii-blue-light);}
+.section-tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--cii-blue);background:var(--cii-blue-light);padding:4px 10px;border-radius:20px;margin-bottom:8px;}
+.pts-badge{background:var(--cii-blue);color:#fff;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:700;}
+.pts-badge.no-score{background:#6b7280;}
+.section-title{font-size:22px;font-weight:700;color:var(--cii-blue-dark);margin-bottom:6px;line-height:1.3;}
+.section-desc{font-size:13.5px;color:var(--text-secondary);}
+
+/* FIELDS */
+.field-group{margin-bottom:28px;}
+.field-label{display:block;font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:8px;}
+.field-label.required::after{content:' *';color:#dc2626;}
+.field-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:12px;}
+.field-pts-label{font-size:11px;font-weight:600;color:var(--cii-blue);background:var(--cii-blue-light);padding:2px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+.field-note{font-size:12.5px;color:var(--text-secondary);margin-bottom:10px;background:#f8fafc;border-left:3px solid var(--cii-blue-light);padding:6px 10px;border-radius:0 6px 6px 0;}
+.field-row-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:28px;}
+.field-row-2 .field-group,.field-row-3 .field-group{margin-bottom:0;}
+.half-width{max-width:360px;}
+.optional-tag{font-size:11px;font-weight:400;color:var(--text-muted);}
+.text-input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;font-family:var(--font);color:var(--text-primary);background:var(--bg-card);transition:border-color .18s,box-shadow .18s;outline:none;-webkit-appearance:none;}
+.text-input:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px rgba(26,95,168,.12);}
+.text-input.textarea{resize:vertical;min-height:72px;}
+.mt-sm{margin-top:10px;}
+
+/* TILES */
+.tile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.tile{border:2px solid var(--border);border-radius:var(--radius);padding:16px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:border-color .18s,background .18s,box-shadow .18s;background:var(--bg-card);user-select:none;}
+.tile:hover,.tile.selected{border-color:var(--cii-blue);background:var(--cii-blue-light);}
+.tile.selected{box-shadow:0 0 0 3px rgba(26,95,168,.15);}
+.tile-icon{font-size:28px;flex-shrink:0;}
+.tile-title{font-size:14px;font-weight:700;color:var(--cii-blue-dark);margin-bottom:2px;}
+.tile-sub{font-size:12px;color:var(--text-secondary);line-height:1.4;}
+
+/* RADIO / CHECKBOX */
+.radio-list,.checkbox-list{display:flex;flex-direction:column;gap:4px;}
+.radio-item,.checkbox-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:13.5px;color:var(--text-primary);transition:border-color .15s,background .15s;line-height:1.45;}
+.radio-item:hover,.checkbox-item:hover{border-color:var(--cii-blue);background:#f0f7ff;}
+.radio-item input,.checkbox-item input{margin-top:2px;flex-shrink:0;accent-color:var(--cii-blue);width:15px;height:15px;}
+.radio-item.checked,.checkbox-item.checked{border-color:var(--cii-blue);background:var(--cii-blue-light);}
+
+/* CHIPS */
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{border:1.5px solid var(--border);background:var(--bg-card);color:var(--text-primary);padding:7px 16px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:var(--font);}
+.chip:hover{border-color:var(--cii-blue);color:var(--cii-blue);background:var(--cii-blue-light);}
+.chip.selected{border-color:var(--cii-blue);background:var(--cii-blue);color:#fff;}
+
+/* TIER GRID */
+.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.tier-tile{border:2px solid var(--border);border-radius:var(--radius);padding:14px 12px;cursor:pointer;text-align:center;transition:all .18s;background:var(--bg-card);user-select:none;}
+.tier-tile:hover,.tier-tile.selected{border-color:var(--cii-blue);background:var(--cii-blue-light);}
+.tier-tile.selected{box-shadow:0 0 0 3px rgba(26,95,168,.15);}
+.tier-dot{width:12px;height:12px;border-radius:50%;margin:0 auto 8px;}
+.tier-dot.top{background:#1d4ed8;} .tier-dot.high{background:#2563eb;} .tier-dot.mid{background:#3b82f6;}
+.tier-dot.mid-low{background:#60a5fa;} .tier-dot.low{background:#93c5fd;} .tier-dot.rural{background:#bfdbfe;}
+.tier-name{font-size:13px;font-weight:700;color:var(--cii-blue-dark);margin-bottom:3px;}
+.tier-pts{font-size:11px;color:var(--text-muted);font-family:var(--mono);}
+
+/* SCORED FIELD */
+.scored-field{border:1px solid #e0e7ff;border-radius:var(--radius);padding:18px 20px;background:#fafbff;margin-bottom:20px;}
+.autoscore-notice{margin-top:10px;padding:8px 12px;background:#fef3c7;border:1px solid #fcd34d;border-radius:6px;font-size:12.5px;color:#92400e;display:flex;align-items:center;gap:6px;}
+
+/* DECLARATION */
+.declaration-box{background:#fff7ed;border:1.5px solid #fed7aa;border-radius:var(--radius);padding:20px;margin-bottom:28px;display:flex;flex-direction:column;gap:12px;}
+.declaration-icon{font-size:22px;}
+.declaration-text{font-size:13px;color:var(--text-secondary);line-height:1.6;}
+.declaration-check{border:none!important;padding:0!important;background:transparent!important;}
+
+/* NAVIGATION */
+.nav-row{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid var(--border);}
+.btn-next,.btn-submit{background:var(--cii-blue);color:#fff;border:none;border-radius:8px;padding:11px 24px;font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer;transition:background .18s,transform .12s;}
+.btn-next:hover{background:var(--cii-blue-dark);transform:translateY(-1px);}
+.btn-submit{background:var(--cii-accent);}
+.btn-submit:hover{background:#b8760e;}
+.btn-back{background:transparent;color:var(--text-secondary);border:1.5px solid var(--border);border-radius:8px;padding:11px 20px;font-size:14px;font-weight:500;font-family:var(--font);cursor:pointer;transition:all .18s;}
+.btn-back:hover{border-color:var(--cii-blue);color:var(--cii-blue);}
+
+/* STEP DOTS */
+.step-nav{position:fixed;right:20px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:50;}
+.step-dot{width:10px;height:10px;border-radius:50%;background:var(--border);border:2px solid var(--border);transition:all .2s;}
+.step-dot.active{background:var(--cii-blue);border-color:var(--cii-blue);transform:scale(1.3);}
+.step-dot.done{background:var(--cii-blue);border-color:var(--cii-blue);opacity:.5;}
+
+/* CAP BLOCKS */
+.cap-block{display:none;}
+.cap-block.visible{display:block;}
+
+/* RESULTS OVERLAY */
+.results-overlay{position:fixed;inset:0;background:rgba(15,61,110,.6);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;display:none;}
+.results-overlay.visible{display:flex;}
+.results-card{background:var(--bg-card);border-radius:var(--radius-lg);max-width:620px;width:100%;padding:36px;box-shadow:var(--shadow-lg);margin:auto;}
+.results-header{text-align:center;margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid var(--cii-blue-light);}
+.results-logo{margin-bottom:10px;}
+.results-title{font-size:22px;font-weight:700;color:var(--cii-blue-dark);}
+.results-subtitle{font-size:14px;color:var(--text-secondary);margin-top:4px;}
+.score-dial-wrap{position:relative;display:flex;flex-direction:column;align-items:center;margin:0 auto 28px;width:200px;}
+.score-dial{width:200px;}
+.score-dial-center{position:absolute;bottom:0;left:50%;transform:translate(-50%,-10px);text-align:center;}
+.score-dial-number{font-size:40px;font-weight:800;font-family:var(--mono);color:var(--cii-blue-dark);line-height:1;}
+.score-dial-label{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.score-dial-badge{margin-top:12px;font-size:13px;font-weight:700;padding:5px 14px;border-radius:20px;background:var(--cii-blue-light);color:var(--cii-blue-dark);}
+.score-breakdown{display:flex;flex-direction:column;gap:12px;margin-bottom:24px;}
+.breakdown-item{display:grid;grid-template-columns:160px 1fr 80px;align-items:center;gap:12px;}
+.breakdown-label{font-size:13px;color:var(--text-secondary);font-weight:500;}
+.breakdown-bar-wrap{height:8px;background:var(--border);border-radius:4px;overflow:hidden;}
+.breakdown-bar{height:100%;background:var(--cii-blue);border-radius:4px;width:0%;transition:width .8s ease;}
+.breakdown-score{font-size:13px;font-weight:700;color:var(--cii-blue-dark);font-family:var(--mono);text-align:right;}
+.category-result-box{display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:var(--radius);border:2px solid var(--border);margin-bottom:20px;background:var(--bg-section);}
+.cat-badge-large{width:52px;height:52px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;flex-shrink:0;background:var(--cii-blue-light);color:var(--cii-blue-dark);}
+.cat-result-label{font-size:16px;font-weight:700;color:var(--cii-blue-dark);margin-bottom:2px;}
+.cat-result-desc{font-size:13px;color:var(--text-secondary);}
+.declaration-summary{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:12px 16px;font-size:12.5px;color:#166534;margin-bottom:20px;line-height:1.6;}
+.results-actions{display:flex;gap:12px;justify-content:center;margin-bottom:16px;}
+.btn-print{background:var(--cii-blue);color:#fff;border:none;border-radius:8px;padding:11px 22px;font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer;}
+.btn-restart{background:transparent;color:var(--text-secondary);border:1.5px solid var(--border);border-radius:8px;padding:11px 22px;font-size:14px;font-weight:500;font-family:var(--font);cursor:pointer;}
+.results-disclaimer{font-size:11.5px;color:var(--text-muted);text-align:center;line-height:1.5;}
+
+/* SAVING SPINNER */
+.saving-msg{text-align:center;padding:16px;font-size:14px;color:var(--text-secondary);}
+
+/* TOAST */
+#toastEl{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#fff;padding:12px 22px;border-radius:8px;font-size:13.5px;font-weight:500;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);transition:transform .3s,opacity .3s;opacity:0;max-width:340px;text-align:center;pointer-events:none;}
+
+/* PRINT */
+@media print{
+  .site-header,.intro-banner,.step-nav,.form-main,.results-actions,.saving-msg{display:none!important;}
+  .results-overlay{position:static;background:none;backdrop-filter:none;padding:0;display:block!important;}
+  .results-card{box-shadow:none;border:1px solid #ccc;max-width:100%;}
+  body{background:#fff;}
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .intro-inner{flex-direction:column;gap:24px;}
+  .intro-right{grid-template-columns:repeat(4,1fr);}
+  .tile-grid{grid-template-columns:1fr;}
+  .field-row-2,.field-row-3{grid-template-columns:1fr;}
+  .tier-grid{grid-template-columns:repeat(2,1fr);}
+  .form-section{padding:20px 16px;}
+  .breakdown-item{grid-template-columns:1fr;gap:4px;}
+  .step-nav{display:none;}
+  .results-card{padding:20px 16px;}
+  .half-width{max-width:100%;}
+}
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="cii-logo-block">
+        <div class="cii-logo-box">CII</div>
+        <div class="cii-logo-text">Confederation of<br>Indian Industry</div>
+      </div>
+      <div class="header-divider"></div>
+      <div class="header-title-block">
+        <span class="header-tag">IRDAI Working Group 2</span>
+        <h1 class="header-title">Healthcare Provider Categorization</h1>
+        <span class="header-version">Assessment Tool &nbsp;·&nbsp; Version 2.0 &nbsp;·&nbsp; June 2025</span>
+      </div>
+    </div>
+    <div class="score-pill">
+      <span class="score-pill-label">Score</span>
+      <span class="score-pill-value" id="headerScoreValue">—</span>
+    </div>
+  </div>
+  <div class="progress-rail"><div class="progress-fill" id="progressFill"></div></div>
+</header>
+
+<!-- INTRO BANNER -->
+<div class="intro-banner">
+  <div class="intro-inner">
+    <div class="intro-left">
+      <h2>HCO Categorization Assessment</h2>
+      <p>Structured self-assessment for healthcare providers seeking insurance network empanelment. Complete all sections for an instant score card.</p>
+      <div class="scoring-legend">
+        <div class="legend-item"><span class="badge a-star">A*</span><span>85–100 &nbsp;Preferred Empanelled</span></div>
+        <div class="legend-item"><span class="badge a">A</span><span>70–84 &nbsp;Standard Empanelled</span></div>
+        <div class="legend-item"><span class="badge b">B</span><span>55–69 &nbsp;Conditional Empanelled</span></div>
+        <div class="legend-item"><span class="badge c">C</span><span>40–54 &nbsp;Probationary Review</span></div>
+        <div class="legend-item"><span class="badge d">D</span><span>0–39 &nbsp;&nbsp;Upgrade &amp; Re-apply</span></div>
+      </div>
+    </div>
+    <div class="intro-right">
+      <div class="weight-card"><div class="weight-num">35</div><div class="weight-label">Quality &amp;<br>Accreditation</div></div>
+      <div class="weight-card"><div class="weight-num">40</div><div class="weight-label">Capability</div></div>
+      <div class="weight-card"><div class="weight-num">10</div><div class="weight-label">Digital<br>Maturity</div></div>
+      <div class="weight-card"><div class="weight-num">15</div><div class="weight-label">Geography</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN FORM -->
+<main class="form-main">
+
+  <!-- STEP 0 — FACILITY TYPE -->
+  <section class="form-section" id="step-0">
+    <div class="section-header">
+      <span class="section-tag">Prerequisite</span>
+      <h2 class="section-title">Facility Type</h2>
+      <p class="section-desc">Your selection determines which Capability questions apply to you.</p>
+    </div>
+    <div class="field-group">
+      <label class="field-label required">Select your primary facility category</label>
+      <div class="tile-grid">
+        <div class="tile" id="tile-multi" onclick="selectTile('multi-specialty')">
+          <div class="tile-icon">🏥</div>
+          <div class="tile-body"><div class="tile-title">Multi-Specialty</div><div class="tile-sub">Less than 4 common specialities</div></div>
+        </div>
+        <div class="tile" id="tile-super" onclick="selectTile('super-specialty')">
+          <div class="tile-icon">🏨</div>
+          <div class="tile-body"><div class="tile-title">Super-Specialty</div><div class="tile-sub">Chain of Hospitals</div></div>
+        </div>
+        <div class="tile" id="tile-single" onclick="selectTile('single-specialty')">
+          <div class="tile-icon">🔬</div>
+          <div class="tile-body"><div class="tile-title">Single-Specialty</div><div class="tile-sub">Oncology · Eye · ENT · AYUSH · Dialysis · IVF · Others</div></div>
+        </div>
+        <div class="tile" id="tile-diagnostic" onclick="selectTile('diagnostic')">
+          <div class="tile-icon">🧪</div>
+          <div class="tile-body"><div class="tile-title">Standalone Diagnostic / Imaging</div><div class="tile-sub">Lab · Imaging · Radiology</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="field-group hidden" id="singleSpecialtyGroup">
+      <label class="field-label required">Single-Specialty Sub-Type</label>
+      <div class="radio-list">
+        <label class="radio-item" id="ri-oncology"><input type="radio" name="singleSpecialtyType" value="oncology" onchange="onSubTypeChange(this)"> Exclusive Oncology Hospital</label>
+        <label class="radio-item" id="ri-eye"><input type="radio" name="singleSpecialtyType" value="eye" onchange="onSubTypeChange(this)"> Exclusive Ophthalmology Centre</label>
+        <label class="radio-item" id="ri-ent"><input type="radio" name="singleSpecialtyType" value="ent" onchange="onSubTypeChange(this)"> Exclusive ENT Centre</label>
+        <label class="radio-item" id="ri-ayush"><input type="radio" name="singleSpecialtyType" value="ayush" onchange="onSubTypeChange(this)"> Exclusive AYUSH Hospital</label>
+        <label class="radio-item" id="ri-dialysis"><input type="radio" name="singleSpecialtyType" value="dialysis" onchange="onSubTypeChange(this)"> Standalone Dialysis Centre</label>
+        <label class="radio-item" id="ri-medical-oncology"><input type="radio" name="singleSpecialtyType" value="medical-oncology" onchange="onSubTypeChange(this)"> Standalone Medical Oncology Centre</label>
+        <label class="radio-item" id="ri-ivf"><input type="radio" name="singleSpecialtyType" value="ivf" onchange="onSubTypeChange(this)"> Standalone IVF Centre</label>
+        <label class="radio-item" id="ri-other"><input type="radio" name="singleSpecialtyType" value="other" onchange="onSubTypeChange(this)"> Others</label>
+      </div>
+      <input type="text" class="text-input hidden mt-sm" id="singleSpecialtyOther" placeholder="Please specify your specialty..." />
+    </div>
+    <div class="nav-row"><button type="button" class="btn-next" onclick="goNext(0)">Continue →</button></div>
+  </section>
+
+  <!-- STEP 1 — IDENTIFICATION -->
+  <section class="form-section hidden" id="step-1">
+    <div class="section-header">
+      <span class="section-tag">Section I</span>
+      <h2 class="section-title">Facility Identification</h2>
+      <p class="section-desc">For validation purposes only — not used for scoring.</p>
+    </div>
+    <div class="field-row-2">
+      <div class="field-group"><label class="field-label required">Facility Name</label><input type="text" id="facilityName" class="text-input" placeholder="Enter facility name" /></div>
+      <div class="field-group"><label class="field-label required">Legal Entity Name</label><input type="text" id="legalEntityName" class="text-input" placeholder="As registered" /></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label required">Facility Ownership Type</label>
+      <div class="chip-row">
+        <button type="button" class="chip" onclick="selectChip(this,'ownershipType')">Public</button>
+        <button type="button" class="chip" onclick="selectChip(this,'ownershipType')">Private</button>
+        <button type="button" class="chip" onclick="selectChip(this,'ownershipType')">Trust</button>
+        <button type="button" class="chip" onclick="selectChip(this,'ownershipType')">PPP</button>
+        <button type="button" class="chip" onclick="selectChip(this,'ownershipType')">Corporate</button>
+        <button type="button" class="chip" onclick="selectChip(this,'ownershipType')">Mission Hospital</button>
+      </div>
+    </div>
+    <div class="field-group"><label class="field-label required">Registered Address</label><textarea id="registeredAddress" class="text-input textarea" rows="2" placeholder="Full registered address"></textarea></div>
+    <div class="field-row-3">
+      <div class="field-group"><label class="field-label required">State</label><input type="text" id="state" class="text-input" placeholder="State" /></div>
+      <div class="field-group"><label class="field-label required">District</label><input type="text" id="district" class="text-input" placeholder="District" /></div>
+      <div class="field-group"><label class="field-label required">Pin Code</label><input type="text" id="pinCode" class="text-input" placeholder="6-digit PIN" maxlength="6" /></div>
+    </div>
+    <div class="field-row-2">
+      <div class="field-group"><label class="field-label required">HFR ID</label><input type="text" id="hfrId" class="text-input" placeholder="Health Facility Registry ID" /></div>
+      <div class="field-group"><label class="field-label required">ROHINI ID</label><input type="text" id="rohiniId" class="text-input" placeholder="ROHINI ID" /></div>
+    </div>
+    <div class="field-row-3">
+      <div class="field-group"><label class="field-label required">Contact Person</label><input type="text" id="contactPerson" class="text-input" placeholder="Full name" /></div>
+      <div class="field-group"><label class="field-label required">Designation</label><input type="text" id="designation" class="text-input" placeholder="Role / title" /></div>
+      <div class="field-group"><label class="field-label required">Email ID</label><input type="email" id="emailId" class="text-input" placeholder="email@hospital.com" /></div>
+    </div>
+    <div class="field-group half-width"><label class="field-label required">Mobile Number</label><input type="tel" id="mobile" class="text-input" placeholder="+91 XXXXX XXXXX" /></div>
+    <div class="nav-row">
+      <button type="button" class="btn-back" onclick="goBack(1)">← Back</button>
+      <button type="button" class="btn-next" onclick="goNext(1)">Continue →</button>
+    </div>
+  </section>
+
+  <!-- STEP 2 — LOCATION -->
+  <section class="form-section hidden" id="step-2">
+    <div class="section-header">
+      <span class="section-tag">Section II &nbsp;·&nbsp; Geography <span class="pts-badge">15 pts</span></span>
+      <h2 class="section-title">Location of the Organisation</h2>
+      <p class="section-desc">Applied as a rate-band by insurers.</p>
+    </div>
+    <div class="field-group">
+      <label class="field-label required">Location Tier</label>
+      <div class="tier-grid">
+        <div class="tier-tile" id="tier-top-metro" data-val="Top-Metro" data-score="15" onclick="selectTier(this)"><div class="tier-dot top"></div><div class="tier-name">Top-Metro</div><div class="tier-pts">15 pts</div></div>
+        <div class="tier-tile" id="tier-metro" data-val="Metro" data-score="13" onclick="selectTier(this)"><div class="tier-dot high"></div><div class="tier-name">Metro</div><div class="tier-pts">13 pts</div></div>
+        <div class="tier-tile" id="tier-1" data-val="Tier-I" data-score="11" onclick="selectTier(this)"><div class="tier-dot mid"></div><div class="tier-name">Tier-I</div><div class="tier-pts">11 pts</div></div>
+        <div class="tier-tile" id="tier-2" data-val="Tier-II" data-score="8" onclick="selectTier(this)"><div class="tier-dot mid-low"></div><div class="tier-name">Tier-II</div><div class="tier-pts">8 pts</div></div>
+        <div class="tier-tile" id="tier-3" data-val="Tier-III" data-score="5" onclick="selectTier(this)"><div class="tier-dot low"></div><div class="tier-name">Tier-III</div><div class="tier-pts">5 pts</div></div>
+        <div class="tier-tile" id="tier-rural" data-val="Rural-Remote" data-score="3" onclick="selectTier(this)"><div class="tier-dot rural"></div><div class="tier-name">Rural / Remote</div><div class="tier-pts">3 pts</div></div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button type="button" class="btn-back" onclick="goBack(2)">← Back</button>
+      <button type="button" class="btn-next" onclick="goNext(2)">Continue →</button>
+    </div>
+  </section>
+
+  <!-- STEP 3 — QUALITY & ACCREDITATION -->
+  <section class="form-section hidden" id="step-3">
+    <div class="section-header">
+      <span class="section-tag">Section III &nbsp;·&nbsp; Quality &amp; Accreditation <span class="pts-badge">35 pts</span></span>
+      <h2 class="section-title">Quality Standards &amp; Governance</h2>
+    </div>
+    <!-- Accreditation -->
+    <div class="scored-field">
+      <div class="field-label-row"><label class="field-label required">Q. Valid Accreditation Held</label><span class="field-pts-label">up to 12 pts</span></div>
+      <p class="field-note">NABH for hospitals/eye/dental · NABL for labs · QCI or NABH for dialysis &amp; chemo</p>
+      <div class="radio-list">
+        <label class="radio-item"><input type="radio" name="accreditation" value="0" data-label="None / Not accredited" onchange="onRadioChange(this); onAccreditationChange(this)"> None / Not accredited</label>
+        <label class="radio-item"><input type="radio" name="accreditation" value="4" data-label="Entry-level NABH / NABL or QCI" onchange="onRadioChange(this); onAccreditationChange(this)"> Entry-level NABH / NABL or QCI recommendation</label>
+        <label class="radio-item"><input type="radio" name="accreditation" value="8" data-label="Full NABH / Full NABL" onchange="onRadioChange(this); onAccreditationChange(this)"> Full NABH / Full NABL</label>
+        <label class="radio-item"><input type="radio" name="accreditation" value="12" data-label="Full NABH/NABL + JCI/ISQua" onchange="onRadioChange(this); onAccreditationChange(this)"> Full NABH / NABL + JCI or international (ISQua)</label>
+        <label class="radio-item"><input type="radio" name="accreditation" value="4" data-label="Others" id="accOtherRadio" onchange="onRadioChange(this); onAccreditationChange(this)"> Others (please specify)</label>
+      </div>
+      <input type="text" class="text-input hidden mt-sm" id="accOtherText" placeholder="Specify accreditation..." />
+    </div>
+    <!-- Infection Control -->
+    <div class="scored-field" id="infectionField">
+      <div class="field-label-row"><label class="field-label required">A. Infection Control Measures</label><span class="field-pts-label">up to 8 pts</span></div>
+      <div class="radio-list">
+        <label class="radio-item"><input type="radio" name="infectionControl" value="0" data-label="None" onchange="onRadioChange(this)"> None</label>
+        <label class="radio-item"><input type="radio" name="infectionControl" value="2" data-label="Basic BMW Compliance" onchange="onRadioChange(this)"> Basic compliance with Biomedical Waste Management (BMW) Rules</label>
+        <label class="radio-item"><input type="radio" name="infectionControl" value="4" data-label="AMSP only" onchange="onRadioChange(this)"> Antimicrobial Stewardship Program (AMSP) only implemented</label>
+        <label class="radio-item"><input type="radio" name="infectionControl" value="6" data-label="AMSP + HAI Tracking" onchange="onRadioChange(this)"> AMSP + Hospital Acquired Infection Tracking</label>
+        <label class="radio-item"><input type="radio" name="infectionControl" value="8" data-label="Comprehensive IPC" onchange="onRadioChange(this)"> Comprehensive and full Infection Prevention and Control systems</label>
+      </div>
+      <div class="autoscore-notice hidden" id="infectionAutoNotice">⚡ Auto-scored 8/8 — Full NABH/JCI accreditation implies comprehensive IPC. You may override.</div>
+    </div>
+    <!-- Regulatory Compliance -->
+    <div class="scored-field" id="regulatoryField">
+      <div class="field-label-row"><label class="field-label required">B. Regulatory Compliance</label><span class="field-pts-label">up to 8 pts</span></div>
+      <div class="radio-list">
+        <label class="radio-item"><input type="radio" name="regulatoryCompliance" value="0" data-label="No License" onchange="onRadioChange(this)"> No License — Operating without valid registration</label>
+        <label class="radio-item"><input type="radio" name="regulatoryCompliance" value="2" data-label="Applied/Temporary Permit" onchange="onRadioChange(this)"> Applied for renewal or operating under temporary permits</label>
+        <label class="radio-item"><input type="radio" name="regulatoryCompliance" value="4" data-label="Active State/Municipal Reg." onchange="onRadioChange(this)"> Holds an active State/Municipal Clinical Establishment Act or Nursing Home registration</label>
+        <label class="radio-item"><input type="radio" name="regulatoryCompliance" value="5" data-label="License + Fire NOC + PCB" onchange="onRadioChange(this)"> License + Basic Safety — Fire NOC and Pollution Control Board clearance</label>
+        <label class="radio-item"><input type="radio" name="regulatoryCompliance" value="7" data-label="All Equipment Licenses (PCPNDT, AERB)" onchange="onRadioChange(this)"> All Equipment Licenses — active permits (PCPNDT, AERB)</label>
+        <label class="radio-item"><input type="radio" name="regulatoryCompliance" value="8" data-label="Zero-Deficiency Status" onchange="onRadioChange(this)"> Zero-Deficiency Status — every license active, zero expired papers</label>
+      </div>
+      <div class="autoscore-notice hidden" id="regulatoryAutoNotice">⚡ Auto-scored 8/8 — Full NABH/JCI verifies Zero-Deficiency compliance.</div>
+    </div>
+    <!-- Clinical Governance -->
+    <div class="scored-field">
+      <div class="field-label-row"><label class="field-label required">C. Clinical Governance</label><span class="field-pts-label">up to 7 pts</span></div>
+      <div class="radio-list">
+        <label class="radio-item"><input type="radio" name="clinicalGovernance" value="0" data-label="No committees" onchange="onRadioChange(this)"> No committees</label>
+        <label class="radio-item"><input type="radio" name="clinicalGovernance" value="2" data-label="Mortality review only" onchange="onRadioChange(this)"> Mortality review only</label>
+        <label class="radio-item"><input type="radio" name="clinicalGovernance" value="3" data-label="Clinical audit committee" onchange="onRadioChange(this)"> Clinical audit committee</label>
+        <label class="radio-item"><input type="radio" name="clinicalGovernance" value="5" data-label="Clinical audit + quality committee" onchange="onRadioChange(this)"> Clinical audit + quality committee</label>
+        <label class="radio-item"><input type="radio" name="clinicalGovernance" value="6" data-label="Audit + quality + patient safety" onchange="onRadioChange(this)"> Audit + quality + patient safety committee</label>
+        <label class="radio-item"><input type="radio" name="clinicalGovernance" value="7" data-label="Full governance + dashboard" onchange="onRadioChange(this)"> Full governance structure with dashboard reporting</label>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button type="button" class="btn-back" onclick="goBack(3)">← Back</button>
+      <button type="button" class="btn-next" onclick="goNext(3)">Continue →</button>
+    </div>
+  </section>
+
+  <!-- STEP 4 — CAPABILITY (dynamic) -->
+  <section class="form-section hidden" id="step-4">
+    <div class="section-header">
+      <span class="section-tag">Section IV &nbsp;·&nbsp; Capability <span class="pts-badge">40 pts</span></span>
+      <h2 class="section-title" id="capTitle">Facility Capability</h2>
+      <p class="section-desc">Tailored to your facility type. Verified via HFR / registration / accreditation scope.</p>
+    </div>
+
+    <!-- MULTI-SPECIALTY -->
+    <div class="cap-block" id="cap-multi">
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">B. Functional Beds</label><span class="field-pts-label">up to 20 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="multiBeds" value="4" data-label="Less than 30" onchange="onRadioChange(this)"> Less than 30</label>
+          <label class="radio-item"><input type="radio" name="multiBeds" value="8" data-label="30–50" onchange="onRadioChange(this)"> 30–50</label>
+          <label class="radio-item"><input type="radio" name="multiBeds" value="12" data-label="50–100" onchange="onRadioChange(this)"> 50–100</label>
+          <label class="radio-item"><input type="radio" name="multiBeds" value="16" data-label="100–200" onchange="onRadioChange(this)"> 100–200</label>
+          <label class="radio-item"><input type="radio" name="multiBeds" value="20" data-label="More than 200" onchange="onRadioChange(this)"> More than 200</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">C. Emergency &amp; Critical Care</label><span class="field-pts-label">up to 20 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="multiEmergency" value="0" data-label="No Structured ICU" onchange="onRadioChange(this)"> No Structured ICU</label>
+          <label class="radio-item"><input type="radio" name="multiEmergency" value="5" data-label="Emergency + No ICU" onchange="onRadioChange(this)"> Emergency + No Structured ICU</label>
+          <label class="radio-item"><input type="radio" name="multiEmergency" value="10" data-label="Emergency + OT, no ICU" onchange="onRadioChange(this)"> Emergency + OT, no Structured ICU</label>
+          <label class="radio-item"><input type="radio" name="multiEmergency" value="15" data-label="Emergency + OT + ICU" onchange="onRadioChange(this)"> Emergency + OT + ICU</label>
+          <label class="radio-item"><input type="radio" name="multiEmergency" value="20" data-label="Emergency + ICU/HDU + OTs + CSSD + Blood Bank" onchange="onRadioChange(this)"> Emergency + ICU/HDU + multiple OTs + CSSD + blood bank</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPER-SPECIALTY -->
+    <div class="cap-block" id="cap-super">
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">A. Functional Beds</label><span class="field-pts-label">up to 14 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="superBeds" value="2" data-label="Less than 100" onchange="onRadioChange(this)"> Less than 100</label>
+          <label class="radio-item"><input type="radio" name="superBeds" value="6" data-label="100–200" onchange="onRadioChange(this)"> 100–200</label>
+          <label class="radio-item"><input type="radio" name="superBeds" value="9" data-label="200–350" onchange="onRadioChange(this)"> 200–350</label>
+          <label class="radio-item"><input type="radio" name="superBeds" value="12" data-label="350–500" onchange="onRadioChange(this)"> 350–500</label>
+          <label class="radio-item"><input type="radio" name="superBeds" value="14" data-label="More than 500" onchange="onRadioChange(this)"> More than 500</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">B. Emergency &amp; Critical Care</label><span class="field-pts-label">up to 16 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="superEmergency" value="0" data-label="No Structured ICU" onchange="onRadioChange(this)"> No Structured ICU</label>
+          <label class="radio-item"><input type="radio" name="superEmergency" value="4" data-label="Emergency + No ICU" onchange="onRadioChange(this)"> Emergency + No Structured ICU</label>
+          <label class="radio-item"><input type="radio" name="superEmergency" value="8" data-label="Emergency + OT, no ICU" onchange="onRadioChange(this)"> Emergency + OT, no Structured ICU</label>
+          <label class="radio-item"><input type="radio" name="superEmergency" value="12" data-label="Emergency + OT + ICU" onchange="onRadioChange(this)"> Emergency + OT + ICU</label>
+          <label class="radio-item"><input type="radio" name="superEmergency" value="16" data-label="Emergency + ICU/HDU + OTs + CSSD + Blood Bank" onchange="onRadioChange(this)"> Emergency + ICU/HDU + multiple OTs + CSSD + blood bank</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">C. Specialty Scope (Training &amp; Research)</label><span class="field-pts-label">up to 10 pts</span></div>
+        <p class="field-note">Number of accredited DNB / NBEMS postgraduate specialty seats</p>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="superScope" value="0" data-label="None" onchange="onRadioChange(this)"> None</label>
+          <label class="radio-item"><input type="radio" name="superScope" value="3" data-label="1–2 specialties" onchange="onRadioChange(this)"> 1–2 specialties</label>
+          <label class="radio-item"><input type="radio" name="superScope" value="5" data-label="3–4 specialties" onchange="onRadioChange(this)"> 3–4 specialties</label>
+          <label class="radio-item"><input type="radio" name="superScope" value="8" data-label="5–6 specialties" onchange="onRadioChange(this)"> 5–6 specialties</label>
+          <label class="radio-item"><input type="radio" name="superScope" value="10" data-label="More than 6" onchange="onRadioChange(this)"> More than 6</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- EYE -->
+    <div class="cap-block" id="cap-eye">
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">1. Working 24×7?</label><span class="field-pts-label">up to 10 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="eye247" value="10" data-label="Yes" onchange="onRadioChange(this)"> Yes</label>
+          <label class="radio-item"><input type="radio" name="eye247" value="0" data-label="No" onchange="onRadioChange(this)"> No</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">2. Beds</label><span class="field-pts-label">up to 10 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="eyeBeds" value="2" data-label="Less than 5" onchange="onRadioChange(this)"> Less than 5</label>
+          <label class="radio-item"><input type="radio" name="eyeBeds" value="4" data-label="5" onchange="onRadioChange(this)"> 5</label>
+          <label class="radio-item"><input type="radio" name="eyeBeds" value="7" data-label="6–10" onchange="onRadioChange(this)"> 6–10</label>
+          <label class="radio-item"><input type="radio" name="eyeBeds" value="10" data-label="More than 10" onchange="onRadioChange(this)"> More than 10</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">3. Surgery Capability</label><span class="field-pts-label">up to 12 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="eyeSurgery" value="3" data-label="OPD only" onchange="onRadioChange(this)"> OPD only</label>
+          <label class="radio-item"><input type="radio" name="eyeSurgery" value="6" data-label="Basic OT" onchange="onRadioChange(this)"> Basic OT</label>
+          <label class="radio-item"><input type="radio" name="eyeSurgery" value="9" data-label="Phaco Retina Glaucoma" onchange="onRadioChange(this)"> Phaco Retina Glaucoma</label>
+          <label class="radio-item"><input type="radio" name="eyeSurgery" value="12" data-label="Full Ophthalmic Services" onchange="onRadioChange(this)"> Full Ophthalmic Services</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">4. Full-time Retinal Surgeon / Glaucoma Specialist</label><span class="field-pts-label">up to 8 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="eyeSpecialist" value="4" data-label="One Full-time" onchange="onRadioChange(this)"> One Full-time</label>
+          <label class="radio-item"><input type="radio" name="eyeSpecialist" value="8" data-label="Multiple Full-time" onchange="onRadioChange(this)"> Multiple Full-time</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENT -->
+    <div class="cap-block" id="cap-ent">
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">5. Working 24×7?</label><span class="field-pts-label">up to 8 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="ent247" value="8" data-label="Yes" onchange="onRadioChange(this)"> Yes</label>
+          <label class="radio-item"><input type="radio" name="ent247" value="0" data-label="No" onchange="onRadioChange(this)"> No</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">6. Beds</label><span class="field-pts-label">up to 8 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="entBeds" value="0" data-label="None" onchange="onRadioChange(this)"> None</label>
+          <label class="radio-item"><input type="radio" name="entBeds" value="2" data-label="Less than 5" onchange="onRadioChange(this)"> Less than 5</label>
+          <label class="radio-item"><input type="radio" name="entBeds" value="4" data-label="5–10" onchange="onRadioChange(this)"> 5–10</label>
+          <label class="radio-item"><input type="radio" name="entBeds" value="6" data-label="10–20" onchange="onRadioChange(this)"> 10–20</label>
+          <label class="radio-item"><input type="radio" name="entBeds" value="8" data-label="More than 20" onchange="onRadioChange(this)"> More than 20</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">7. Clinical &amp; Surgical Capability</label><span class="field-pts-label">up to 10 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="entSurgery" value="2" data-label="OPD Consultation Only" onchange="onRadioChange(this)"> OPD Consultation Only</label>
+          <label class="radio-item"><input type="radio" name="entSurgery" value="4" data-label="Minor ENT Procedures" onchange="onRadioChange(this)"> Minor ENT Procedures (Nasal Endoscopy, Ear Procedures, Foreign Body Removal)</label>
+          <label class="radio-item"><input type="radio" name="entSurgery" value="6" data-label="Routine ENT Surgery" onchange="onRadioChange(this)"> Routine ENT Surgery (Tonsillectomy, Adenoidectomy, Septoplasty)</label>
+          <label class="radio-item"><input type="radio" name="entSurgery" value="8" data-label="Advanced ENT Surgery" onchange="onRadioChange(this)"> Advanced ENT Surgery (Microscopic Ear, FESS, Head &amp; Neck)</label>
+          <label class="radio-item"><input type="radio" name="entSurgery" value="10" data-label="Comprehensive ENT Centre" onchange="onRadioChange(this)"> Comprehensive ENT Centre (Otology, Rhinology, Laryngology, H&amp;N Oncology, Sleep Medicine)</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">8. Specialist Availability</label><span class="field-pts-label">up to 10 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="entSpecialist" value="2" data-label="Visiting ENT Specialist" onchange="onRadioChange(this)"> Visiting ENT Specialist Only</label>
+          <label class="radio-item"><input type="radio" name="entSpecialist" value="4" data-label="One Full-time ENT" onchange="onRadioChange(this)"> One Full-time ENT Specialist</label>
+          <label class="radio-item"><input type="radio" name="entSpecialist" value="6" data-label="Multiple Full-time ENT" onchange="onRadioChange(this)"> Multiple Full-time ENT Specialists</label>
+          <label class="radio-item"><input type="radio" name="entSpecialist" value="8" data-label="Sub-specialty Services" onchange="onRadioChange(this)"> Sub-specialty Services (Otology/Rhinology/Laryngology)</label>
+          <label class="radio-item"><input type="radio" name="entSpecialist" value="10" data-label="MDT incl. H&N Surgeon, Audiologist" onchange="onRadioChange(this)"> Multidisciplinary Team incl. Head &amp; Neck Surgeon, Audiologist, Speech Therapist</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">9. Critical Care Support</label><span class="field-pts-label">up to 4 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="entCritical" value="0" data-label="No Emergency Services" onchange="onRadioChange(this)"> No Emergency Services</label>
+          <label class="radio-item"><input type="radio" name="entCritical" value="1" data-label="Daytime Emergency" onchange="onRadioChange(this)"> Daytime Emergency Services</label>
+          <label class="radio-item"><input type="radio" name="entCritical" value="2" data-label="24x7 ENT Coverage" onchange="onRadioChange(this)"> 24×7 Emergency ENT Coverage</label>
+          <label class="radio-item"><input type="radio" name="entCritical" value="3" data-label="Emergency + ICU Tie-up" onchange="onRadioChange(this)"> Emergency Coverage + ICU Tie-up</label>
+          <label class="radio-item"><input type="radio" name="entCritical" value="4" data-label="Full Airway Mgmt + ICU/HDU" onchange="onRadioChange(this)"> Full Emergency Airway Management + ICU/HDU Support</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- AYUSH -->
+    <div class="cap-block" id="cap-ayush">
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">1. Working 24×7?</label><span class="field-pts-label">up to 8 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="ayush247" value="8" data-label="Yes" onchange="onRadioChange(this)"> Yes</label>
+          <label class="radio-item"><input type="radio" name="ayush247" value="0" data-label="No" onchange="onRadioChange(this)"> No</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">2. Beds</label><span class="field-pts-label">up to 10 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="ayushBeds" value="2" data-label="Less than 10" onchange="onRadioChange(this)"> Less than 10</label>
+          <label class="radio-item"><input type="radio" name="ayushBeds" value="4" data-label="10–20" onchange="onRadioChange(this)"> 10–20</label>
+          <label class="radio-item"><input type="radio" name="ayushBeds" value="6" data-label="20–50" onchange="onRadioChange(this)"> 20–50</label>
+          <label class="radio-item"><input type="radio" name="ayushBeds" value="8" data-label="50–100" onchange="onRadioChange(this)"> 50–100</label>
+          <label class="radio-item"><input type="radio" name="ayushBeds" value="10" data-label="More than 100" onchange="onRadioChange(this)"> More than 100</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">3. Clinical Services Offered</label><span class="field-pts-label">up to 12 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="ayushServices" value="2" data-label="OPD only" onchange="onRadioChange(this)"> OPD only</label>
+          <label class="radio-item"><input type="radio" name="ayushServices" value="5" data-label="OPD + IPD" onchange="onRadioChange(this)"> OPD + IPD</label>
+          <label class="radio-item"><input type="radio" name="ayushServices" value="8" data-label="OPD + IPD + Panchakarma" onchange="onRadioChange(this)"> OPD + IPD + Panchakarma</label>
+          <label class="radio-item"><input type="radio" name="ayushServices" value="10" data-label="Above + Ksharsutra/Specialised" onchange="onRadioChange(this)"> Above + Ksharsutra / Specialized therapies</label>
+          <label class="radio-item"><input type="radio" name="ayushServices" value="12" data-label="Full Integrative AYUSH" onchange="onRadioChange(this)"> Full integrative AYUSH hospital services</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">4. Full-Time AYUSH Specialists (MD degree)</label><span class="field-pts-label">up to 10 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="ayushSpecialists" value="0" data-label="None" onchange="onRadioChange(this)"> None</label>
+          <label class="radio-item"><input type="radio" name="ayushSpecialists" value="2" data-label="1–2 Specialists" onchange="onRadioChange(this)"> 1–2 Specialists</label>
+          <label class="radio-item"><input type="radio" name="ayushSpecialists" value="5" data-label="3–5 Specialists" onchange="onRadioChange(this)"> 3–5 Specialists</label>
+          <label class="radio-item"><input type="radio" name="ayushSpecialists" value="7" data-label="6–10 Specialists" onchange="onRadioChange(this)"> 6–10 Specialists</label>
+          <label class="radio-item"><input type="radio" name="ayushSpecialists" value="9" data-label="More than 10 Specialists" onchange="onRadioChange(this)"> More than 10 Specialists</label>
+          <label class="radio-item"><input type="radio" name="ayushSpecialists" value="10" data-label="Multidisciplinary AYUSH Team" onchange="onRadioChange(this)"> Multidisciplinary AYUSH team (Ayurveda + Yoga + Naturopathy + others)</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIALYSIS -->
+    <div class="cap-block" id="cap-dialysis">
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">1. Number of Machines</label><span class="field-pts-label">up to 14 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="dialysisMachines" value="3" data-label="Less than 6" onchange="onRadioChange(this)"> Less than 6</label>
+          <label class="radio-item"><input type="radio" name="dialysisMachines" value="7" data-label="6–9" onchange="onRadioChange(this)"> 6–9</label>
+          <label class="radio-item"><input type="radio" name="dialysisMachines" value="11" data-label="10–15" onchange="onRadioChange(this)"> 10–15</label>
+          <label class="radio-item"><input type="radio" name="dialysisMachines" value="14" data-label="More than 15" onchange="onRadioChange(this)"> More than 15</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">2. Supervision</label><span class="field-pts-label">up to 16 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="dialysisSupervision" value="0" data-label="None" onchange="onRadioChange(this)"> None</label>
+          <label class="radio-item"><input type="radio" name="dialysisSupervision" value="5" data-label="Visiting Nephrologist" onchange="onRadioChange(this)"> Visiting Nephrologist</label>
+          <label class="radio-item"><input type="radio" name="dialysisSupervision" value="10" data-label="Full-time Nephrologist" onchange="onRadioChange(this)"> Full-time Nephrologist</label>
+          <label class="radio-item"><input type="radio" name="dialysisSupervision" value="16" data-label="Full-time + RO/Quality Calibration" onchange="onRadioChange(this)"> Full-time Safety (RO / Quality Calibration of machines)</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">3. Hospital Tie-up</label><span class="field-pts-label">up to 10 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="dialysisTieup" value="0" data-label="None" onchange="onRadioChange(this)"> None</label>
+          <label class="radio-item"><input type="radio" name="dialysisTieup" value="5" data-label="Informal" onchange="onRadioChange(this)"> Informal</label>
+          <label class="radio-item"><input type="radio" name="dialysisTieup" value="10" data-label="Formal Hospital Tie-up" onchange="onRadioChange(this)"> Formal Hospital Tie-up</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDICAL ONCOLOGY -->
+    <div class="cap-block" id="cap-oncology">
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">1. Beds</label><span class="field-pts-label">up to 14 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="oncoBeds" value="3" data-label="Less than 6" onchange="onRadioChange(this)"> Less than 6</label>
+          <label class="radio-item"><input type="radio" name="oncoBeds" value="7" data-label="6–9" onchange="onRadioChange(this)"> 6–9</label>
+          <label class="radio-item"><input type="radio" name="oncoBeds" value="11" data-label="10–15" onchange="onRadioChange(this)"> 10–15</label>
+          <label class="radio-item"><input type="radio" name="oncoBeds" value="14" data-label="15+" onchange="onRadioChange(this)"> 15+</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">2. Oncology Staffing</label><span class="field-pts-label">up to 16 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="oncoStaff" value="0" data-label="None" onchange="onRadioChange(this)"> None</label>
+          <label class="radio-item"><input type="radio" name="oncoStaff" value="5" data-label="Visiting Oncologist" onchange="onRadioChange(this)"> Visiting Oncologist</label>
+          <label class="radio-item"><input type="radio" name="oncoStaff" value="10" data-label="Full-time Oncologist" onchange="onRadioChange(this)"> Full-time Oncologist</label>
+          <label class="radio-item"><input type="radio" name="oncoStaff" value="16" data-label="Full-time Biosafety" onchange="onRadioChange(this)"> Full-time Biosafety</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">3. Support Services</label><span class="field-pts-label">up to 10 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="oncoSupport" value="0" data-label="None" onchange="onRadioChange(this)"> None</label>
+          <label class="radio-item"><input type="radio" name="oncoSupport" value="5" data-label="In-house Lab" onchange="onRadioChange(this)"> In-house Lab</label>
+          <label class="radio-item"><input type="radio" name="oncoSupport" value="10" data-label="Lab + Hospital Tie-up" onchange="onRadioChange(this)"> Lab + Hospital Tie-up</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- IVF -->
+    <div class="cap-block" id="cap-ivf">
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">1. Annual IVF Cycles</label><span class="field-pts-label">up to 14 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="ivfCycles" value="2" data-label="Less than 50" onchange="onRadioChange(this)"> Less than 50</label>
+          <label class="radio-item"><input type="radio" name="ivfCycles" value="5" data-label="50–100" onchange="onRadioChange(this)"> 50–100</label>
+          <label class="radio-item"><input type="radio" name="ivfCycles" value="8" data-label="100–200" onchange="onRadioChange(this)"> 100–200</label>
+          <label class="radio-item"><input type="radio" name="ivfCycles" value="11" data-label="200–500" onchange="onRadioChange(this)"> 200–500</label>
+          <label class="radio-item"><input type="radio" name="ivfCycles" value="14" data-label="More than 500" onchange="onRadioChange(this)"> More than 500</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">2. Embryology Infrastructure</label><span class="field-pts-label">up to 16 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="ivfEmbryo" value="0" data-label="Outsourced embryology" onchange="onRadioChange(this)"> Outsourced embryology</label>
+          <label class="radio-item"><input type="radio" name="ivfEmbryo" value="4" data-label="Basic IVF lab" onchange="onRadioChange(this)"> Basic IVF lab</label>
+          <label class="radio-item"><input type="radio" name="ivfEmbryo" value="8" data-label="In-house embryologist" onchange="onRadioChange(this)"> In-house embryologist</label>
+          <label class="radio-item"><input type="radio" name="ivfEmbryo" value="12" data-label="Advanced IVF + cryopreservation" onchange="onRadioChange(this)"> Advanced IVF lab + cryopreservation</label>
+          <label class="radio-item"><input type="radio" name="ivfEmbryo" value="16" data-label="Full IVF + ICSI + PGT" onchange="onRadioChange(this)"> Full IVF + ICSI + PGT capability</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">3. Clinical Team</label><span class="field-pts-label">up to 10 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="ivfTeam" value="2" data-label="Visiting Infertility Specialist" onchange="onRadioChange(this)"> Visiting Infertility Specialist</label>
+          <label class="radio-item"><input type="radio" name="ivfTeam" value="4" data-label="Full-time Specialist" onchange="onRadioChange(this)"> Full-time Specialist</label>
+          <label class="radio-item"><input type="radio" name="ivfTeam" value="6" data-label="Full-time Specialist + Embryologist" onchange="onRadioChange(this)"> Full-time Specialist + Embryologist</label>
+          <label class="radio-item"><input type="radio" name="ivfTeam" value="8" data-label="Multi-specialist Fertility Team" onchange="onRadioChange(this)"> Multi-specialist Fertility Team</label>
+          <label class="radio-item"><input type="radio" name="ivfTeam" value="10" data-label="Reproductive Medicine Unit" onchange="onRadioChange(this)"> Reproductive Medicine Unit</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIAGNOSTIC -->
+    <div class="cap-block" id="cap-diagnostic">
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">1. Type of Facility</label><span class="field-pts-label">up to 6 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="diagType" value="3" data-label="Single set-up" onchange="onRadioChange(this)"> Single set-up</label>
+          <label class="radio-item"><input type="radio" name="diagType" value="6" data-label="Chain of diagnostics (3+)" onchange="onRadioChange(this)"> Chain of diagnostics (more than 3)</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">3. Footfalls per Day</label><span class="field-pts-label">up to 6 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="diagFootfall" value="1" data-label="Less than 25" onchange="onRadioChange(this)"> Less than 25</label>
+          <label class="radio-item"><input type="radio" name="diagFootfall" value="2" data-label="25–50" onchange="onRadioChange(this)"> 25–50</label>
+          <label class="radio-item"><input type="radio" name="diagFootfall" value="3" data-label="50–100" onchange="onRadioChange(this)"> 50–100</label>
+          <label class="radio-item"><input type="radio" name="diagFootfall" value="5" data-label="100–200" onchange="onRadioChange(this)"> 100–200</label>
+          <label class="radio-item"><input type="radio" name="diagFootfall" value="6" data-label="More than 200" onchange="onRadioChange(this)"> More than 200</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">4. Staffing on Payroll</label><span class="field-pts-label">up to 8 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="diagStaff" value="2" data-label="Less than 5" onchange="onRadioChange(this)"> Less than 5</label>
+          <label class="radio-item"><input type="radio" name="diagStaff" value="4" data-label="6–10" onchange="onRadioChange(this)"> 6–10</label>
+          <label class="radio-item"><input type="radio" name="diagStaff" value="6" data-label="10–20" onchange="onRadioChange(this)"> 10–20</label>
+          <label class="radio-item"><input type="radio" name="diagStaff" value="8" data-label="More than 20" onchange="onRadioChange(this)"> More than 20</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">5. Specialist Staffing</label><span class="field-pts-label">up to 10 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="diagSpecialist" value="0" data-label="No Full-time Pathologist/Radiologist" onchange="onRadioChange(this)"> No Full-time Pathologist / Radiologist</label>
+          <label class="radio-item"><input type="radio" name="diagSpecialist" value="4" data-label="Full-time Pathologist/Radiologist" onchange="onRadioChange(this)"> Full-time Pathologist / Radiologist</label>
+          <label class="radio-item"><input type="radio" name="diagSpecialist" value="7" data-label="Full-time + Quality Manager" onchange="onRadioChange(this)"> Full-time + Quality Manager</label>
+          <label class="radio-item"><input type="radio" name="diagSpecialist" value="10" data-label="Full-time + Quality Manager + Microbiologist/Neuroradiologist" onchange="onRadioChange(this)"> Full-time + Quality Manager + Microbiologist / Neuroradiologist etc.</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">6. External Quality Assurance (EQAS)</label><span class="field-pts-label">up to 6 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="diagEqas" value="0" data-label="None" onchange="onRadioChange(this)"> None</label>
+          <label class="radio-item"><input type="radio" name="diagEqas" value="2" data-label="Participation" onchange="onRadioChange(this)"> Participation</label>
+          <label class="radio-item"><input type="radio" name="diagEqas" value="4" data-label="Participation + Corrective Actions" onchange="onRadioChange(this)"> Participation + documented corrective actions</label>
+          <label class="radio-item"><input type="radio" name="diagEqas" value="6" data-label="International EQAS" onchange="onRadioChange(this)"> International EQAS participation</label>
+        </div>
+      </div>
+      <div class="scored-field"><div class="field-label-row"><label class="field-label required">7. In-house Diagnostic Capability</label><span class="field-pts-label">up to 4 pts</span></div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="diagCapability" value="0" data-label="Collection Centre Only" onchange="onRadioChange(this)"> Collection Centre Only (all tests outsourced)</label>
+          <label class="radio-item"><input type="radio" name="diagCapability" value="1" data-label="Basic In-house Testing" onchange="onRadioChange(this)"> Basic In-house Testing (Haematology/Biochemistry only)</label>
+          <label class="radio-item"><input type="radio" name="diagCapability" value="2" data-label="Comprehensive Lab/Imaging" onchange="onRadioChange(this)"> Comprehensive Laboratory or Imaging Centre with in-house reporting</label>
+          <label class="radio-item"><input type="radio" name="diagCapability" value="3" data-label="Multi-disciplinary Diagnostic Centre" onchange="onRadioChange(this)"> Multi-disciplinary Diagnostic Centre (Pathology + Microbiology + Imaging)</label>
+          <label class="radio-item"><input type="radio" name="diagCapability" value="4" data-label="Advanced Diagnostic Centre" onchange="onRadioChange(this)"> Advanced Diagnostic Centre (Molecular, Histopathology, IHC, CT/MRI/PET-CT)</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button type="button" class="btn-back" onclick="goBack(4)">← Back</button>
+      <button type="button" class="btn-next" onclick="goNext(4)">Continue →</button>
+    </div>
+  </section>
+
+  <!-- STEP 5 — DIGITAL MATURITY -->
+  <section class="form-section hidden" id="step-5">
+    <div class="section-header">
+      <span class="section-tag">Section V &nbsp;·&nbsp; Digital Maturity <span class="pts-badge">10 pts</span></span>
+      <h2 class="section-title">Digital Maturity</h2>
+      <p class="section-desc">Verified via ABDM / HFR / NHCX registry.</p>
+    </div>
+    <div class="scored-field"><div class="field-label-row"><label class="field-label required">1. HMIS</label><span class="field-pts-label">up to 5 pts</span></div>
+      <div class="radio-list">
+        <label class="radio-item"><input type="radio" name="hmis" value="0" data-label="None / Paper based" onchange="onRadioChange(this)"> None / Paper based</label>
+        <label class="radio-item"><input type="radio" name="hmis" value="1" data-label="Ad-hoc / Billing Driven" onchange="onRadioChange(this)"> Ad-hoc / Billing Driven</label>
+        <label class="radio-item"><input type="radio" name="hmis" value="2" data-label="Basic Centralized HIS" onchange="onRadioChange(this)"> Basic Centralized HIS exists</label>
+        <label class="radio-item"><input type="radio" name="hmis" value="4" data-label="Advanced Clinical Automation" onchange="onRadioChange(this)"> Advanced clinical automation</label>
+        <label class="radio-item"><input type="radio" name="hmis" value="5" data-label="Completely Integrated + Operational" onchange="onRadioChange(this)"> Completely Integrated + Operational</label>
+      </div>
+    </div>
+    <div class="scored-field"><div class="field-label-row"><label class="field-label required">2. ABDM / NHCX Status</label><span class="field-pts-label">up to 5 pts</span></div>
+      <div class="radio-list">
+        <label class="radio-item"><input type="radio" name="abdm" value="0" data-label="Not Registered" onchange="onRadioChange(this)"> Not Registered</label>
+        <label class="radio-item"><input type="radio" name="abdm" value="1" data-label="HFR ID Obtained" onchange="onRadioChange(this)"> HFR ID Obtained</label>
+        <label class="radio-item"><input type="radio" name="abdm" value="2" data-label="ABDM Compliant Software" onchange="onRadioChange(this)"> ABDM Compliant Software Implemented</label>
+        <label class="radio-item"><input type="radio" name="abdm" value="4" data-label="ABHA-linked Records" onchange="onRadioChange(this)"> ABHA-linked records</label>
+        <label class="radio-item"><input type="radio" name="abdm" value="5" data-label="NHCX-onboarded (paperless-cashless)" onchange="onRadioChange(this)"> NHCX-onboarded (paperless–cashless)</label>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button type="button" class="btn-back" onclick="goBack(5)">← Back</button>
+      <button type="button" class="btn-next" onclick="goNext(5)">Continue →</button>
+    </div>
+  </section>
+
+  <!-- STEP 6 — DECLARATION -->
+  <section class="form-section hidden" id="step-6">
+    <div class="section-header">
+      <span class="section-tag">Section VI &nbsp;·&nbsp; Declaration <span class="pts-badge no-score">Not Scored</span></span>
+      <h2 class="section-title">Declaration &amp; Empanelment Details</h2>
+      <p class="section-desc">For contracting and network mapping. Not included in score calculation.</p>
+    </div>
+    <div class="field-group">
+      <label class="field-label required">1. Empanelled for Retail Insurance &amp; GMC?</label>
+      <div class="chip-row">
+        <button type="button" class="chip" id="chip-emp-yes" onclick="selectChip(this,'empanelledInsurance')">Yes</button>
+        <button type="button" class="chip" id="chip-emp-no" onclick="selectChip(this,'empanelledInsurance')">No</button>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">2. Government Schemes Empanelled <span class="optional-tag">(select all that apply)</span></label>
+      <div class="checkbox-list">
+        <label class="checkbox-item"><input type="checkbox" name="govSchemes" value="CGHS" onchange="onCheckboxChange(this)"> CGHS</label>
+        <label class="checkbox-item"><input type="checkbox" name="govSchemes" value="ECHS" onchange="onCheckboxChange(this)"> ECHS</label>
+        <label class="checkbox-item"><input type="checkbox" name="govSchemes" value="ESI" onchange="onCheckboxChange(this)"> ESI</label>
+        <label class="checkbox-item"><input type="checkbox" name="govSchemes" value="PSU" onchange="onCheckboxChange(this)"> PSU</label>
+        <label class="checkbox-item"><input type="checkbox" name="govSchemes" value="AB PM-JAY" onchange="onCheckboxChange(this)"> AB PM-JAY</label>
+      </div>
+    </div>
+    <div class="field-group"><label class="field-label">3. Existing TPA / Insurer Panels</label><textarea id="tpaPanel" class="text-input textarea" rows="3" placeholder="List all TPA / insurer panels you are currently empanelled with..."></textarea></div>
+    <div class="field-group">
+      <label class="field-label required">4. Any disciplinary action taken by Insurers?</label>
+      <div class="chip-row">
+        <button type="button" class="chip" id="chip-disc-yes" onclick="selectChip(this,'disciplinaryAction'); showEl('disciplinaryDetails')">Yes</button>
+        <button type="button" class="chip" id="chip-disc-no" onclick="selectChip(this,'disciplinaryAction'); hideEl('disciplinaryDetails')">No</button>
+      </div>
+      <textarea id="disciplinaryDetails" class="text-input textarea hidden mt-sm" rows="2" placeholder="Please specify details..."></textarea>
+    </div>
+    <div class="field-group half-width"><label class="field-label">5. CRISIL Score for Promoter / MD</label><input type="text" id="crisilScore" class="text-input" placeholder="e.g. BBB+" /></div>
+    <div class="field-group">
+      <label class="field-label required">6. Online Patient Feedback Mechanism?</label>
+      <div class="chip-row">
+        <button type="button" class="chip" id="chip-fb-yes" onclick="selectChip(this,'feedbackMechanism')">Yes</button>
+        <button type="button" class="chip" id="chip-fb-no" onclick="selectChip(this,'feedbackMechanism')">No</button>
+      </div>
+    </div>
+    <div class="declaration-box">
+      <div class="declaration-icon">📋</div>
+      <p class="declaration-text"><strong>Declaration:</strong> I confirm that all information submitted is accurate, complete, and supported by documentary evidence available for verification on request.</p>
+      <label class="checkbox-item declaration-check"><input type="checkbox" id="declarationCheck" onchange="onCheckboxChange(this)"> I confirm the above declaration and agree that all responses are truthful and verifiable.</label>
+    </div>
+    <div class="nav-row">
+      <button type="button" class="btn-back" onclick="goBack(6)">← Back</button>
+      <button type="button" class="btn-submit" onclick="submitForm()">Submit &amp; View Score →</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- RESULTS OVERLAY -->
+<div class="results-overlay" id="resultsOverlay">
+  <div class="results-card">
+    <div class="results-header">
+      <div class="results-logo"><div class="cii-logo-box sm">CII</div></div>
+      <h2 class="results-title">Categorization Score Card</h2>
+      <p class="results-subtitle" id="resultsFacilityName"></p>
+    </div>
+    <div class="score-dial-wrap">
+      <svg class="score-dial" viewBox="0 0 200 120">
+        <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e5e7eb" stroke-width="14" stroke-linecap="round"/>
+        <path id="scoreArc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#1a5fa8" stroke-width="14" stroke-linecap="round" stroke-dasharray="0 251.2"/>
+      </svg>
+      <div class="score-dial-center">
+        <div class="score-dial-number" id="dialNumber">0</div>
+        <div class="score-dial-label">out of 100</div>
+      </div>
+      <div class="score-dial-badge" id="scoreBadge">—</div>
+    </div>
+    <div class="score-breakdown">
+      <div class="breakdown-item"><div class="breakdown-label">Quality &amp; Accreditation</div><div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-quality"></div></div><div class="breakdown-score" id="score-quality">0 / 35</div></div>
+      <div class="breakdown-item"><div class="breakdown-label">Capability</div><div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-capability"></div></div><div class="breakdown-score" id="score-capability">0 / 40</div></div>
+      <div class="breakdown-item"><div class="breakdown-label">Digital Maturity</div><div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-digital"></div></div><div class="breakdown-score" id="score-digital">0 / 10</div></div>
+      <div class="breakdown-item"><div class="breakdown-label">Geography</div><div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-geography"></div></div><div class="breakdown-score" id="score-geography">0 / 15</div></div>
+    </div>
+    <div class="category-result-box" id="categoryResultBox">
+      <div class="cat-badge-large" id="catBadgeLarge">—</div>
+      <div class="cat-result-text"><div class="cat-result-label" id="catResultLabel">—</div><div class="cat-result-desc" id="catResultDesc">—</div></div>
+    </div>
+    <div class="declaration-summary" id="declarationSummary"></div>
+    <div class="saving-msg" id="savingMsg" style="display:none;">⏳ Saving response to Google Sheets...</div>
+    <div class="results-actions">
+      <button type="button" class="btn-print" onclick="window.print()">⬇ Print / Save PDF</button>
+      <button type="button" class="btn-restart" onclick="restartForm()">Start Over</button>
+    </div>
+    <p class="results-disclaimer">This score is indicative and subject to verification by the categorizing authority.</p>
+  </div>
+</div>
+
+<!-- Step Dots -->
+<div class="step-nav" id="stepNav">
+  <div class="step-dot active" title="Facility Type"></div>
+  <div class="step-dot" title="Identification"></div>
+  <div class="step-dot" title="Geography"></div>
+  <div class="step-dot" title="Quality"></div>
+  <div class="step-dot" title="Capability"></div>
+  <div class="step-dot" title="Digital"></div>
+  <div class="step-dot" title="Declaration"></div>
+</div>
+
+<div id="toastEl"></div>
+
+<script>
+// ============================================================
+// HCO v2.0 — CLIENT-SIDE JS (runs in browser inside GAS iframe)
+// NO server-side APIs used here — only DOM manipulation
+// google.script.run is used ONLY on submit to save to Sheets
+// ============================================================
+
+var appState = {
+  currentStep: 0,
+  facilityType: null,
+  subType: null,
+  ownershipType: null,
+  empanelledInsurance: null,
+  disciplinaryAction: null,
+  feedbackMechanism: null,
+  locationScore: 0,
+  locationLabel: ''
+};
+
+// ---- STEP NAVIGATION ----
+function goNext(step) {
+  if (!validateStep(step)) return;
+  var next = step + 1;
+  showStep(next);
+  window.scrollTo(0, 0);
+}
+
+function goBack(step) {
+  showStep(step - 1);
+  window.scrollTo(0, 0);
+}
+
+function showStep(n) {
+  for (var i = 0; i < 7; i++) {
+    var s = document.getElementById('step-' + i);
+    if (s) s.className = 'form-section hidden';
+  }
+  var target = document.getElementById('step-' + n);
+  if (target) target.className = 'form-section';
+  appState.currentStep = n;
+  updateDots(n);
+  updateProgress(n);
+  updateScorePill();
+}
+
+function updateDots(active) {
+  var dots = document.querySelectorAll('.step-dot');
+  for (var i = 0; i < dots.length; i++) {
+    dots[i].className = 'step-dot' + (i === active ? ' active' : (i < active ? ' done' : ''));
+  }
+}
+
+function updateProgress(step) {
+  var pct = (step / 6) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ---- TILE SELECTION ----
+function selectTile(val) {
+  var ids = ['tile-multi','tile-super','tile-single','tile-diagnostic'];
+  for (var i = 0; i < ids.length; i++) {
+    var el = document.getElementById(ids[i]);
+    if (el) el.className = 'tile';
+  }
+  var map = {
+    'multi-specialty': 'tile-multi',
+    'super-specialty': 'tile-super',
+    'single-specialty': 'tile-single',
+    'diagnostic': 'tile-diagnostic'
+  };
+  var sel = document.getElementById(map[val]);
+  if (sel) sel.className = 'tile selected';
+  appState.facilityType = val;
+
+  var ssg = document.getElementById('singleSpecialtyGroup');
+  if (val === 'single-specialty') {
+    ssg.className = 'field-group';
+  } else {
+    ssg.className = 'field-group hidden';
+    appState.subType = null;
+  }
+  configureCapability(val, appState.subType);
+}
+
+function onSubTypeChange(radio) {
+  appState.subType = radio.value;
+  var otherInput = document.getElementById('singleSpecialtyOther');
+  otherInput.className = 'text-input mt-sm' + (radio.value === 'other' ? '' : ' hidden');
+  // Update checked style
+  var items = document.querySelectorAll('#singleSpecialtyGroup .radio-item');
+  for (var i = 0; i < items.length; i++) {
+    var inp = items[i].querySelector('input');
+    items[i].className = 'radio-item' + (inp && inp.checked ? ' checked' : '');
+  }
+  configureCapability('single-specialty', radio.value);
+}
+
+// ---- CAPABILITY BLOCKS ----
+function configureCapability(ft, sub) {
+  var blocks = ['cap-multi','cap-super','cap-eye','cap-ent','cap-ayush','cap-dialysis','cap-oncology','cap-ivf','cap-diagnostic'];
+  for (var i = 0; i < blocks.length; i++) {
+    var b = document.getElementById(blocks[i]);
+    if (b) b.className = 'cap-block';
+  }
+  var titleEl = document.getElementById('capTitle');
+  var show = null;
+  var title = 'Facility Capability';
+  if (ft === 'multi-specialty')   { show = 'cap-multi';       title = 'Multi-Specialty — Facility Capability'; }
+  else if (ft === 'super-specialty') { show = 'cap-super';    title = 'Super-Specialty — Facility Capability'; }
+  else if (ft === 'diagnostic')   { show = 'cap-diagnostic';  title = 'Standalone Diagnostic / Imaging — Capability'; }
+  else if (ft === 'single-specialty') {
+    var m = { eye:'cap-eye', ent:'cap-ent', ayush:'cap-ayush', dialysis:'cap-dialysis',
+              'medical-oncology':'cap-oncology', oncology:'cap-oncology', ivf:'cap-ivf' };
+    var t = { eye:'Exclusive Ophthalmology — Capability', ent:'Exclusive ENT — Capability',
+              ayush:'Exclusive AYUSH Hospital — Capability', dialysis:'Standalone Dialysis Centre — Capability',
+              'medical-oncology':'Standalone Medical Oncology — Capability', oncology:'Exclusive Oncology — Capability',
+              ivf:'Standalone IVF Centre — Capability' };
+    if (sub && m[sub]) { show = m[sub]; title = t[sub] || 'Single-Specialty — Capability'; }
+  }
+  if (show) {
+    var el = document.getElementById(show);
+    if (el) el.className = 'cap-block visible';
+  }
+  if (titleEl) titleEl.textContent = title;
+}
+
+// ---- TIER SELECTION ----
+function selectTier(tile) {
+  var tiles = document.querySelectorAll('.tier-tile');
+  for (var i = 0; i < tiles.length; i++) tiles[i].className = 'tier-tile';
+  tile.className = 'tier-tile selected';
+  appState.locationScore = parseInt(tile.getAttribute('data-score')) || 0;
+  appState.locationLabel = tile.getAttribute('data-val') || '';
+  updateScorePill();
+}
+
+// ---- CHIP SELECTION ----
+function selectChip(chip, field) {
+  var row = chip.parentElement;
+  var chips = row.querySelectorAll('.chip');
+  for (var i = 0; i < chips.length; i++) chips[i].className = 'chip';
+  chip.className = 'chip selected';
+  appState[field] = chip.textContent.trim();
+}
+
+// ---- RADIO CHANGE (update checked style) ----
+function onRadioChange(radio) {
+  var siblings = document.querySelectorAll('input[name="' + radio.name + '"]');
+  for (var i = 0; i < siblings.length; i++) {
+    var label = siblings[i].parentElement;
+    label.className = 'radio-item' + (siblings[i].checked ? ' checked' : '');
+  }
+  updateScorePill();
+}
+
+function onCheckboxChange(checkbox) {
+  var label = checkbox.parentElement;
+  label.className = label.className.replace(' checked', '') + (checkbox.checked ? ' checked' : '');
+}
+
+// ---- ACCREDITATION AUTO-SCORE ----
+function onAccreditationChange(radio) {
+  onRadioChange(radio);
+  var val = parseInt(radio.value);
+  var isFullNabh = (val === 12);
+
+  var iN = document.getElementById('infectionAutoNotice');
+  var rN = document.getElementById('regulatoryAutoNotice');
+
+  if (iN) iN.className = isFullNabh ? 'autoscore-notice' : 'autoscore-notice hidden';
+  if (rN) rN.className = isFullNabh ? 'autoscore-notice' : 'autoscore-notice hidden';
+
+  if (isFullNabh) {
+    autoSelectRadio('infectionControl', '8');
+    autoSelectRadio('regulatoryCompliance', '8');
+  }
+
+  // Show/hide "others" text
+  var otherText = document.getElementById('accOtherText');
+  var otherRadio = document.getElementById('accOtherRadio');
+  if (otherText && otherRadio) {
+    otherText.className = 'text-input mt-sm' + (otherRadio.checked ? '' : ' hidden');
+  }
+}
+
+function autoSelectRadio(name, value) {
+  var radios = document.querySelectorAll('input[name="' + name + '"]');
+  for (var i = 0; i < radios.length; i++) {
+    radios[i].checked = (radios[i].value === value);
+    var label = radios[i].parentElement;
+    label.className = 'radio-item' + (radios[i].checked ? ' checked' : '');
+  }
+}
+
+// ---- HELPERS ----
+function showEl(id) { var e = document.getElementById(id); if (e) e.className = e.className.replace(' hidden','') + ''; }
+function hideEl(id) {
+  var e = document.getElementById(id);
+  if (e) { e.className = (e.className.indexOf('hidden') === -1 ? e.className + ' hidden' : e.className); e.value = ''; }
+}
+function getRadioVal(name) {
+  var el = document.querySelector('input[name="' + name + '"]:checked');
+  return el ? parseInt(el.value) : 0;
+}
+function getRadioLabel(name) {
+  var el = document.querySelector('input[name="' + name + '"]:checked');
+  return el ? (el.getAttribute('data-label') || '') : '';
+}
+function getVal(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; }
+
+// ---- LIVE SCORE ----
+function updateScorePill() {
+  var s = calculateScore();
+  var pill = document.getElementById('headerScoreValue');
+  if (pill) pill.textContent = s.total > 0 ? s.total : '—';
+}
+
+// ---- SCORING ENGINE ----
+function calculateScore() {
+  var quality = 0, capability = 0, digital = 0;
+  quality += getRadioVal('accreditation');
+  quality += getRadioVal('infectionControl');
+  quality += getRadioVal('regulatoryCompliance');
+  quality += getRadioVal('clinicalGovernance');
+  quality = Math.min(quality, 35);
+
+  var ft = appState.facilityType;
+  var sub = appState.subType;
+  var rawCap = 0, capMax = 40;
+
+  if (ft === 'multi-specialty') {
+    rawCap = getRadioVal('multiBeds') + getRadioVal('multiEmergency');
+    capMax = 40;
+  } else if (ft === 'super-specialty') {
+    rawCap = getRadioVal('superBeds') + getRadioVal('superEmergency') + getRadioVal('superScope');
+    capMax = 40;
+  } else if (ft === 'single-specialty') {
+    var fieldMap = {
+      eye:      ['eye247','eyeBeds','eyeSurgery','eyeSpecialist'],
+      ent:      ['ent247','entBeds','entSurgery','entSpecialist','entCritical'],
+      ayush:    ['ayush247','ayushBeds','ayushServices','ayushSpecialists'],
+      dialysis: ['dialysisMachines','dialysisSupervision','dialysisTieup'],
+      'medical-oncology':['oncoBeds','oncoStaff','oncoSupport'],
+      oncology: ['oncoBeds','oncoStaff','oncoSupport'],
+      ivf:      ['ivfCycles','ivfEmbryo','ivfTeam']
+    };
+    var maxMap = { eye:40, ent:40, ayush:40, dialysis:40, 'medical-oncology':40, oncology:40, ivf:40 };
+    var fields = (sub && fieldMap[sub]) ? fieldMap[sub] : [];
+    for (var i = 0; i < fields.length; i++) rawCap += getRadioVal(fields[i]);
+    capMax = (sub && maxMap[sub]) ? maxMap[sub] : 40;
+  } else if (ft === 'diagnostic') {
+    rawCap = getRadioVal('diagType') + getRadioVal('diagFootfall') + getRadioVal('diagStaff') +
+             getRadioVal('diagSpecialist') + getRadioVal('diagEqas') + getRadioVal('diagCapability');
+    capMax = 40;
+  }
+
+  capability = capMax > 0 ? Math.round((rawCap / capMax) * 40) : 0;
+  capability = Math.min(capability, 40);
+
+  digital = Math.min(getRadioVal('hmis') + getRadioVal('abdm'), 10);
+  var geography = Math.min(appState.locationScore || 0, 15);
+  var total = quality + capability + digital + geography;
+
+  return { quality: quality, capability: capability, digital: digital, geography: geography, total: total };
+}
+
+// ---- VALIDATION ----
+function validateStep(step) {
+  if (step === 0) {
+    if (!appState.facilityType) { toast('Please select a facility type.'); return false; }
+    if (appState.facilityType === 'single-specialty') {
+      if (!appState.subType) { toast('Please select your single-specialty sub-type.'); return false; }
+      if (appState.subType === 'other' && !getVal('singleSpecialtyOther')) {
+        toast('Please specify your facility type.'); return false;
+      }
+    }
+    return true;
+  }
+  if (step === 1) {
+    var reqIds = ['facilityName','legalEntityName','registeredAddress','state','district','pinCode','contactPerson','designation','emailId','mobile'];
+    for (var i = 0; i < reqIds.length; i++) {
+      if (!getVal(reqIds[i])) { toast('Please fill in all required fields (Section I).'); return false; }
+    }
+    if (!appState.ownershipType) { toast('Please select the ownership type.'); return false; }
+    var email = getVal('emailId');
+    if (email.indexOf('@') === -1 || email.indexOf('.') === -1) { toast('Please enter a valid email address.'); return false; }
+    if (!/^\d{6}$/.test(getVal('pinCode'))) { toast('Pin code must be exactly 6 digits.'); return false; }
+    return true;
+  }
+  if (step === 2) {
+    if (!appState.locationLabel) { toast('Please select your location tier.'); return false; }
+    return true;
+  }
+  if (step === 3) {
+    var q3 = ['accreditation','infectionControl','regulatoryCompliance','clinicalGovernance'];
+    var q3l = ['Valid Accreditation','Infection Control','Regulatory Compliance','Clinical Governance'];
+    for (var j = 0; j < q3.length; j++) {
+      if (!document.querySelector('input[name="' + q3[j] + '"]:checked')) {
+        toast('Please answer: ' + q3l[j]); return false;
+      }
+    }
+    return true;
+  }
+  if (step === 4) {
+    var ft = appState.facilityType, sub = appState.subType;
+    var reqFields = [];
+    if (ft === 'multi-specialty')    reqFields = ['multiBeds','multiEmergency'];
+    else if (ft === 'super-specialty') reqFields = ['superBeds','superEmergency','superScope'];
+    else if (ft === 'diagnostic')    reqFields = ['diagType','diagFootfall','diagStaff','diagSpecialist','diagEqas','diagCapability'];
+    else if (ft === 'single-specialty') {
+      var fm = { eye:['eye247','eyeBeds','eyeSurgery','eyeSpecialist'], ent:['ent247','entBeds','entSurgery','entSpecialist','entCritical'],
+        ayush:['ayush247','ayushBeds','ayushServices','ayushSpecialists'], dialysis:['dialysisMachines','dialysisSupervision','dialysisTieup'],
+        'medical-oncology':['oncoBeds','oncoStaff','oncoSupport'], oncology:['oncoBeds','oncoStaff','oncoSupport'],
+        ivf:['ivfCycles','ivfEmbryo','ivfTeam'] };
+      reqFields = (sub && fm[sub]) ? fm[sub] : [];
+    }
+    for (var k = 0; k < reqFields.length; k++) {
+      if (!document.querySelector('input[name="' + reqFields[k] + '"]:checked')) {
+        toast('Please answer all capability questions.'); return false;
+      }
+    }
+    return true;
+  }
+  if (step === 5) {
+    if (!document.querySelector('input[name="hmis"]:checked')) { toast('Please answer the HMIS question.'); return false; }
+    if (!document.querySelector('input[name="abdm"]:checked')) { toast('Please answer the ABDM/NHCX question.'); return false; }
+    return true;
+  }
+  if (step === 6) {
+    if (!appState.empanelledInsurance) { toast('Please indicate retail insurance empanelment status.'); return false; }
+    if (!appState.disciplinaryAction)  { toast('Please indicate disciplinary action status.'); return false; }
+    if (!appState.feedbackMechanism)   { toast('Please indicate online feedback mechanism status.'); return false; }
+    if (!document.getElementById('declarationCheck').checked) { toast('Please confirm the declaration.'); return false; }
+    return true;
+  }
+  return true;
+}
+
+// ---- SUBMIT ----
+function submitForm() {
+  if (!validateStep(6)) return;
+  var score = calculateScore();
+  var cat   = getCategory(score.total);
+
+  // Collect gov schemes
+  var schemes = [];
+  var schemeCbs = document.querySelectorAll('input[name="govSchemes"]:checked');
+  for (var i = 0; i < schemeCbs.length; i++) schemes.push(schemeCbs[i].value);
+
+  // Build payload for Apps Script
+  var payload = {
+    facilityName:           getVal('facilityName'),
+    legalEntityName:        getVal('legalEntityName'),
+    ownershipType:          appState.ownershipType || '',
+    registeredAddress:      getVal('registeredAddress'),
+    state:                  getVal('state'),
+    district:               getVal('district'),
+    pinCode:                getVal('pinCode'),
+    hfrId:                  getVal('hfrId'),
+    rohiniId:               getVal('rohiniId'),
+    contactPerson:          getVal('contactPerson'),
+    designation:            getVal('designation'),
+    emailId:                getVal('emailId'),
+    mobile:                 getVal('mobile'),
+    facilityType:           appState.facilityType || '',
+    singleSpecialtySubType: appState.subType || '',
+    locationTier:           appState.locationLabel,
+    accreditationLabel:     getRadioLabel('accreditation'),
+    infectionControlLabel:  getRadioLabel('infectionControl'),
+    regulatoryComplianceLabel: getRadioLabel('regulatoryCompliance'),
+    clinicalGovernanceLabel:getRadioLabel('clinicalGovernance'),
+    hmisLabel:              getRadioLabel('hmis'),
+    abdmLabel:              getRadioLabel('abdm'),
+    // Capability labels (map to generic slots)
+    cap1Label: getCapLabel(1), cap2Label: getCapLabel(2), cap3Label: getCapLabel(3),
+    cap4Label: getCapLabel(4), cap5Label: getCapLabel(5), cap6Label: getCapLabel(6), cap7Label: getCapLabel(7),
+    diagTypeLabel:       getRadioLabel('diagType'),
+    diagFootfallLabel:   getRadioLabel('diagFootfall'),
+    diagStaffLabel:      getRadioLabel('diagStaff'),
+    diagSpecialistLabel: getRadioLabel('diagSpecialist'),
+    diagEqasLabel:       getRadioLabel('diagEqas'),
+    diagCapabilityLabel: getRadioLabel('diagCapability'),
+    empanelledInsurance: appState.empanelledInsurance || '',
+    govSchemes:          schemes,
+    tpaPanel:            getVal('tpaPanel'),
+    disciplinaryAction:  appState.disciplinaryAction || '',
+    disciplinaryDetails: getVal('disciplinaryDetails'),
+    crisilScore:         getVal('crisilScore'),
+    feedbackMechanism:   appState.feedbackMechanism || '',
+    scoreQuality:        score.quality,
+    scoreCapability:     score.capability,
+    scoreDigital:        score.digital,
+    scoreGeography:      score.geography,
+    scoreTotal:          score.total,
+    categoryCode:        cat.code,
+    categoryLabel:       cat.label
+  };
+
+  // Show results immediately
+  showResults(score, payload);
+
+  // Save to Sheets asynchronously
+  var savingMsg = document.getElementById('savingMsg');
+  if (savingMsg) savingMsg.style.display = 'block';
+
+  if (typeof google !== 'undefined' && google.script && google.script.run) {
+    google.script.run
+      .withSuccessHandler(function(result) {
+        if (savingMsg) savingMsg.style.display = 'none';
+        if (result && result.success) {
+          toast('✅ Response saved to Google Sheets (Row ' + result.rowNumber + ')');
+        } else {
+          toast('⚠️ Score shown but save failed. Please screenshot your results.');
+        }
+      })
+      .withFailureHandler(function(err) {
+        if (savingMsg) savingMsg.style.display = 'none';
+        toast('⚠️ Score shown but save failed: ' + (err.message || 'Unknown error'));
+      })
+      .submitResponse(payload);
+  } else {
+    // Running outside GAS (e.g. local testing) — just hide spinner
+    if (savingMsg) savingMsg.style.display = 'none';
+  }
+}
+
+function getCapLabel(slot) {
+  var ft = appState.facilityType, sub = appState.subType;
+  var slotMap = {
+    'multi-specialty':    ['multiBeds','multiEmergency','','','','',''],
+    'super-specialty':    ['superBeds','superEmergency','superScope','','','',''],
+    eye:                  ['eye247','eyeBeds','eyeSurgery','eyeSpecialist','','',''],
+    ent:                  ['ent247','entBeds','entSurgery','entSpecialist','entCritical','',''],
+    ayush:                ['ayush247','ayushBeds','ayushServices','ayushSpecialists','','',''],
+    dialysis:             ['dialysisMachines','dialysisSupervision','dialysisTieup','','','',''],
+    'medical-oncology':   ['oncoBeds','oncoStaff','oncoSupport','','','',''],
+    oncology:             ['oncoBeds','oncoStaff','oncoSupport','','','',''],
+    ivf:                  ['ivfCycles','ivfEmbryo','ivfTeam','','','','']
+  };
+  var key = (ft === 'single-specialty') ? sub : ft;
+  var fields = slotMap[key] || [];
+  var fieldName = fields[slot - 1] || '';
+  return fieldName ? getRadioLabel(fieldName) : '';
+}
+
+// ---- RESULTS DISPLAY ----
+function showResults(score, payload) {
+  document.getElementById('resultsFacilityName').textContent = payload.facilityName || 'Healthcare Facility';
+  animateDial(score.total);
+  setTimeout(function() {
+    setBar('bar-quality',    score.quality,    35);
+    setBar('bar-capability', score.capability, 40);
+    setBar('bar-digital',    score.digital,    10);
+    setBar('bar-geography',  score.geography,  15);
+  }, 300);
+  document.getElementById('score-quality').textContent    = score.quality    + ' / 35';
+  document.getElementById('score-capability').textContent = score.capability + ' / 40';
+  document.getElementById('score-digital').textContent    = score.digital    + ' / 10';
+  document.getElementById('score-geography').textContent  = score.geography  + ' / 15';
+
+  var cat = getCategory(score.total);
+  document.getElementById('catBadgeLarge').textContent  = cat.code;
+  document.getElementById('catResultLabel').textContent = cat.label;
+  document.getElementById('catResultDesc').textContent  = cat.desc;
+  document.getElementById('scoreBadge').textContent     = cat.code + ' — ' + cat.label;
+
+  var box = document.getElementById('categoryResultBox');
+  var badge = document.getElementById('catBadgeLarge');
+  if (box)   box.style.borderColor   = cat.color;
+  if (badge) { badge.style.background = cat.bgColor; badge.style.color = cat.color; }
+
+  var schemes = payload.govSchemes && payload.govSchemes.length ? payload.govSchemes.join(', ') : 'None';
+  document.getElementById('declarationSummary').innerHTML =
+    '<strong>Declaration Summary:</strong> Retail/GMC Empanelment: ' + (payload.empanelledInsurance || '—') +
+    ' &nbsp;|&nbsp; Govt Schemes: ' + schemes +
+    ' &nbsp;|&nbsp; Online Feedback: ' + (payload.feedbackMechanism || '—');
+
+  document.getElementById('resultsOverlay').className = 'results-overlay visible';
+}
+
+function animateDial(score) {
+  var arcEl = document.getElementById('scoreArc');
+  var numEl = document.getElementById('dialNumber');
+  var arcLen = 251.2, filled = (score / 100) * arcLen;
+  var start = null;
+  var duration = 1200;
+  function step(ts) {
+    if (!start) start = ts;
+    var p = Math.min((ts - start) / duration, 1);
+    var e = 1 - Math.pow(1 - p, 3);
+    numEl.textContent = Math.round(score * e);
+    arcEl.setAttribute('stroke-dasharray', (filled * e) + ' ' + arcLen);
+    arcEl.setAttribute('stroke', getCategory(Math.round(score * e)).color);
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function setBar(id, val, max) {
+  var el = document.getElementById(id);
+  if (el) el.style.width = ((val / max) * 100) + '%';
+}
+
+function getCategory(score) {
+  if (score >= 85) return { code:'A*', label:'Preferred Empanelled',   desc:'Highest tier — eligible for preferred network with enhanced tariffs.',   color:'#92400e', bgColor:'#fef3c7' };
+  if (score >= 70) return { code:'A',  label:'Standard Empanelled',    desc:'Standard network empanelment — eligible for all major insurer panels.',  color:'#14532d', bgColor:'#dcfce7' };
+  if (score >= 55) return { code:'B',  label:'Conditional Empanelled', desc:'Conditional — subject to gap-closure plan within 12 months.',            color:'#1d4ed8', bgColor:'#dbeafe' };
+  if (score >= 40) return { code:'C',  label:'Probationary Review',    desc:'Probationary — empanelment deferred pending infrastructure improvements.',color:'#7c3aed', bgColor:'#ede9fe' };
+  return             { code:'D',  label:'Upgrade & Re-apply',    desc:'Not eligible — significant gaps identified. Please address and re-apply.',  color:'#dc2626', bgColor:'#fee2e2' };
+}
+
+// ---- RESTART ----
+function restartForm() {
+  if (!confirm('Start over? All responses will be cleared.')) return;
+  // Reset all inputs
+  var inputs = document.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+  for (var i = 0; i < inputs.length; i++) inputs[i].checked = false;
+  var texts = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], textarea');
+  for (var j = 0; j < texts.length; j++) texts[j].value = '';
+  // Reset tiles, chips, tiers
+  var tiles = document.querySelectorAll('.tile'); for (var a = 0; a < tiles.length; a++) tiles[a].className = 'tile';
+  var chips = document.querySelectorAll('.chip'); for (var b = 0; b < chips.length; b++) chips[b].className = 'chip';
+  var tiers = document.querySelectorAll('.tier-tile'); for (var c = 0; c < tiers.length; c++) tiers[c].className = 'tier-tile';
+  var radios = document.querySelectorAll('.radio-item'); for (var d = 0; d < radios.length; d++) radios[d].className = 'radio-item';
+  var cbs = document.querySelectorAll('.checkbox-item'); for (var f = 0; f < cbs.length; f++) cbs[f].className = 'checkbox-item';
+  // Hide conditional elements
+  hideEl('singleSpecialtyOther'); hideEl('disciplinaryDetails'); hideEl('accOtherText');
+  document.getElementById('singleSpecialtyGroup').className = 'field-group hidden';
+  document.getElementById('infectionAutoNotice').className = 'autoscore-notice hidden';
+  document.getElementById('regulatoryAutoNotice').className = 'autoscore-notice hidden';
+  // Reset cap blocks
+  var caps = document.querySelectorAll('.cap-block'); for (var g = 0; g < caps.length; g++) caps[g].className = 'cap-block';
+  // Reset state
+  appState = { currentStep:0, facilityType:null, subType:null, ownershipType:null,
+               empanelledInsurance:null, disciplinaryAction:null, feedbackMechanism:null,
+               locationScore:0, locationLabel:'' };
+  document.getElementById('headerScoreValue').textContent = '—';
+  document.getElementById('resultsOverlay').className = 'results-overlay';
+  showStep(0);
+  window.scrollTo(0, 0);
+}
+
+// ---- TOAST ----
+function toast(msg) {
+  var el = document.getElementById('toastEl');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.opacity = '1';
+  el.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(el._t);
+  el._t = setTimeout(function() {
+    el.style.opacity = '0';
+    el.style.transform = 'translateX(-50%) translateY(80px)';
+  }, 3200);
+}
+
+// Init
+showStep(0);
+</script>
+</body>
+</html>
