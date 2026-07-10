@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CII — Categorization of HCOs v2.0</title>
+  <title>Categorisation of Healthcare Organisations (HCOs) — Assessment Framework v2.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
@@ -220,15 +220,9 @@ body{font-family:var(--font);background:var(--bg-page);color:var(--text-primary)
 <header class="site-header">
   <div class="header-inner">
     <div class="header-brand">
-      <div class="cii-logo-block">
-        <div class="cii-logo-box">CII</div>
-        <div class="cii-logo-text">Confederation of<br>Indian Industry</div>
-      </div>
-      <div class="header-divider"></div>
       <div class="header-title-block">
-        <span class="header-tag">IRDAI Working Group 2</span>
-        <h1 class="header-title">Healthcare Provider Categorization</h1>
-        <span class="header-version">Assessment Tool &nbsp;·&nbsp; Version 2.0 &nbsp;·&nbsp; July 2026</span>
+        <h1 class="header-title">Categorisation of Healthcare organisations (HCOs)</h1>
+        <span class="header-version">Assessment Framework &nbsp;·&nbsp; Version 2.0 &nbsp;·&nbsp; July 2026</span>
       </div>
     </div>
     <div class="score-pill">
@@ -243,7 +237,7 @@ body{font-family:var(--font);background:var(--bg-page);color:var(--text-primary)
 <div class="intro-banner">
   <div class="intro-inner">
     <div class="intro-left">
-      <h2>HCO Categorization Assessment</h2>
+      <h2>HCO Categorisation Assessment</h2>
       <p>Structured self-assessment for healthcare providers seeking insurance network empanelment. Complete all sections for an instant score card.</p>
       <div class="scoring-legend">
         <div class="legend-item"><span class="badge a-star">A*</span><span>85–100 &nbsp;Preferred Empanelled</span></div>
@@ -364,6 +358,7 @@ body{font-family:var(--font);background:var(--bg-page);color:var(--text-primary)
     <div class="field-group">
       <label class="field-label required">Location Tier</label>
       <div class="tier-grid">
+        <div class="tier-tile" id="tier-top-metro" data-val="Top-Metro" data-score="15" onclick="selectTier(this)"><div class="tier-dot top"></div><div class="tier-name">Top-Metro</div><div class="tier-pts">15 pts</div></div>
         <div class="tier-tile" id="tier-metro" data-val="Metro" data-score="13" onclick="selectTier(this)"><div class="tier-dot high"></div><div class="tier-name">Metro</div><div class="tier-pts">13 pts</div></div>
         <div class="tier-tile" id="tier-1" data-val="Tier-I" data-score="11" onclick="selectTier(this)"><div class="tier-dot mid"></div><div class="tier-name">Tier-I</div><div class="tier-pts">11 pts</div></div>
         <div class="tier-tile" id="tier-2" data-val="Tier-II" data-score="8" onclick="selectTier(this)"><div class="tier-dot mid-low"></div><div class="tier-name">Tier-II</div><div class="tier-pts">8 pts</div></div>
@@ -849,8 +844,7 @@ body{font-family:var(--font);background:var(--bg-page);color:var(--text-primary)
 <div class="results-overlay" id="resultsOverlay">
   <div class="results-card">
     <div class="results-header">
-      <div class="results-logo"><div class="cii-logo-box sm">CII</div></div>
-      <h2 class="results-title">Categorization Score Card</h2>
+      <h2 class="results-title">Categorisation Score Card</h2>
       <p class="results-subtitle" id="resultsFacilityName"></p>
     </div>
     <div class="score-dial-wrap">
