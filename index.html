@@ -1300,10 +1300,18 @@ function submitToBackend(scores){
     return;
   }
   const payload = collectPayload(scores);
-  const url = GOOGLE_SCRIPT_URL + "?data=" + encodeURIComponent(JSON.stringify(payload));
   statusEl.textContent = "⏳ Saving response to Google Sheets...";
   statusEl.className = "status-msg";
-  fetch(url, { method: "GET", mode: "no-cors" })
+  // Sent as application/x-www-form-urlencoded (via URLSearchParams) rather
+  // than a raw JSON body — Apps Script parses this into e.parameter the
+  // same reliable way it parses GET query strings, avoiding both the
+  // URL-length limit (data is in the body, not the URL) and the parsing
+  // ambiguity of a raw text/plain POST body.
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: new URLSearchParams({ data: JSON.stringify(payload) }),
+  })
     .then(() => {
       // no-cors responses are opaque; assume success, verify in the sheet if needed
       statusEl.textContent = "✓ Response submitted.";
