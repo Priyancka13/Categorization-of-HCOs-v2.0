@@ -1225,6 +1225,24 @@ function renderScoreCard(scores){
   document.getElementById("tileDigital").textContent = `${scores.digitalScore} / 10`;
 }
 
+function fmtEntry(entry){
+  return entry ? `${entry.label} (${entry.pts} pts)` : "";
+}
+
+function buildCapabilityDetail(bucket){
+  const lines = [];
+  Object.entries(bucket).forEach(([key, val]) => {
+    if(key === "_othersNotes"){
+      if(val) lines.push(`Notes: ${val}`);
+      return;
+    }
+    if(val && typeof val.pts === "number"){
+      lines.push(`${val.subparam}: ${val.label} (${val.pts} pts)`);
+    }
+  });
+  return lines.join("\n");
+}
+
 function collectPayload(scores){
   const val = id => document.getElementById(id) ? document.getElementById(id).value.trim() : "";
   const radioVal = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ""; };
@@ -1249,10 +1267,17 @@ function collectPayload(scores){
     email: val("email"),
     mobile: val("mobile"),
     capabilityScore: scores.isOthers ? "Pending Manual Review" : scores.capabilityScore,
+    capabilityDetail: buildCapabilityDetail(state.answers.capability),
     qualityScore: scores.qualityScore,
+    qualityAccreditation: fmtEntry(state.answers.quality.accreditation),
+    qualityInfectionControl: fmtEntry(state.answers.quality.infectionControl),
+    qualityRegulatoryCompliance: fmtEntry(state.answers.quality.regulatoryCompliance),
+    qualityClinicalGovernance: fmtEntry(state.answers.quality.clinicalGovernance),
     geographyScore: scores.geoScore,
     geographyTier: state.answers.geography ? state.answers.geography.label : "",
     digitalScore: scores.digitalScore,
+    digitalHmis: fmtEntry(state.answers.digital.hmis),
+    digitalAbdmNhcx: fmtEntry(state.answers.digital.abdmNhcx),
     totalScore: scores.isOthers ? "Pending Manual Review" : scores.total,
     categoryBand: scores.isOthers ? "Pending Manual Review" : scores.band.code,
     empanelledRetail: radioVal("empanelledRetail"),
