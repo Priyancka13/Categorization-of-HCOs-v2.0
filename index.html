@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Categorisation of Healthcare Organisations (HCOs) — Assessment Framework v2.1</title>
+<title>Categorisation of Healthcare Organisations (HCOs) — Assessment Framework v2.2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -83,6 +83,9 @@
   }
   .facility-card:hover{border-color:#9FC2D8;}
   .facility-card.selected{border-color:var(--teal);background:#F1F9F8;}
+.facility-card.disabled{cursor:not-allowed;opacity:.55;}
+.facility-card.disabled:hover{border-color:var(--border);}
+.facility-card .fbadge{display:inline-block;margin-top:4px;font-size:0.7rem;font-weight:700;color:var(--muted);background:#EEF1F4;padding:2px 8px;border-radius:10px;}
   .facility-card .ficon{font-size:1.6rem;margin-bottom:6px;}
   .facility-card .ftitle{font-weight:700;font-size:0.98rem;margin-bottom:2px;letter-spacing:0.1px;}
   .facility-card .fsub{font-size:0.8rem;color:var(--muted);line-height:1.4;}
@@ -200,7 +203,7 @@
 <header class="top">
   <div class="wrap">
     <h1>Categorisation of Healthcare Organisations (HCOs)</h1>
-    <div class="sub">Assessment Framework · Version 2.1 · July 2026 · CII Working Group 2</div>
+    <div class="sub">Assessment Framework · Version 2.2 · Working Group 2</div>
   </div>
 </header>
 
@@ -214,7 +217,7 @@
   <div class="card step" data-step="0">
     <div class="step-title">Before you begin</div>
     <div class="step-heading">About this Framework</div>
-    <p class="about-lead">The categorisation assessment is <strong>not</strong> intended to rate hospitals, establish clinical rankings, or serve as a public quality assessment mechanism.</p>
+    <p class="about-lead">The categorisation assessment is <strong>NOT</strong> intended to rate hospitals, establish clinical rankings, or serve as a public quality assessment mechanism.</p>
     <p class="about-lead">The objective of this exercise is to provide a common reference structure that can be used by healthcare providers and insurers for:</p>
     <ul class="about-bullets">
       <li><span class="bnum">1</span><span>Improve trust between Healthcare Providers &amp; Insurers</span></li>
@@ -253,10 +256,42 @@
     </div>
   </div>
 
+  <!-- STEP 2: Questions that Initiate the Questionnaire -->
+  <div class="card step hidden" data-step="2">
+    <div class="step-title">Prerequisite</div>
+    <div class="step-heading">Questions that Initiate the Questionnaire</div>
+    <div class="step-desc">If the answer to either question is "No", the categorisation questionnaire does not open.</div>
+
+    <div class="field">
+      <label class="flabel">1. Valid Clinical Establishments Act (CEA) registration, or applicable state-specific Nursing Home / Medical Establishment licence <span class="req">*</span></label>
+      <div class="radio-yn">
+        <label><input type="radio" name="screeningCEA" value="Yes"> Yes</label>
+        <label><input type="radio" name="screeningCEA" value="No"> No</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="flabel">2. Local Clearance Authority (municipal trade licence or local body NOC) available <span class="req">*</span></label>
+      <div class="radio-yn">
+        <label><input type="radio" name="screeningNOC" value="Yes"> Yes</label>
+        <label><input type="radio" name="screeningNOC" value="No"> No</label>
+      </div>
+    </div>
+
+    <div id="screeningBlockedNote" class="banner-note hidden" style="background:#FCE9E9;border-color:#E3B3B3;color:#7A1F1F;">
+      ⚠ Questionnaire does not open. A valid CEA/State licence and Local Clearance/NOC are both required before this assessment can proceed.
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-secondary" id="screeningBackBtn">← Back</button>
+      <button type="button" class="btn btn-primary" id="screeningContinueBtn">Continue →</button>
+    </div>
+  </div>
+
   <form id="hcoForm">
 
-  <!-- STEP 2: Facility Type -->
-  <div class="card step hidden" data-step="2">
+  <!-- STEP 3: Facility Type -->
+  <div class="card step hidden" data-step="3">
     <div class="step-title">Prerequisite</div>
     <div class="step-heading">Facility Type</div>
     <div class="step-desc">Your selection determines which Capability questionnaire (Section II) applies. Everything else stays constant.</div>
@@ -277,8 +312,8 @@
     </div>
   </div>
 
-  <!-- STEP 3: Section I Facility Identification -->
-  <div class="card step hidden" data-step="3">
+  <!-- STEP 4: Section I Facility Identification -->
+  <div class="card step hidden" data-step="4">
     <div class="step-title">Section I</div>
     <div class="step-heading">Facility Identification</div>
     <div class="step-desc">For validation purposes only — not used for categorisation scoring.</div>
@@ -300,12 +335,24 @@
     <div class="field"><label class="flabel">Registered Address <span class="req">*</span></label><textarea id="regAddress" rows="2" required></textarea></div>
 
     <div class="grid2">
-      <div class="field"><label class="flabel">State <span class="req">*</span></label><input type="text" id="state" required></div>
-      <div class="field"><label class="flabel">District <span class="req">*</span></label><input type="text" id="district" required></div>
+      <div class="field">
+        <label class="flabel">State <span class="req">*</span></label>
+        <select id="state" required><option value="">Select…</option></select>
+      </div>
+      <div class="field">
+        <label class="flabel">District <span class="req">*</span></label>
+        <select id="district" required disabled><option value="">Select a state first…</option></select>
+      </div>
     </div>
     <div class="grid2">
-      <div class="field"><label class="flabel">Pin Code <span class="req">*</span></label><input type="text" id="pinCode" required></div>
-      <div class="field"><label class="flabel">Health Facility Registry (HFR) ID <span class="req">*</span></label><input type="text" id="hfrId" required></div>
+      <div class="field">
+        <label class="flabel">Pin Code <span class="req">*</span></label>
+        <input type="text" id="pinCode" inputmode="numeric" maxlength="6" placeholder="6-digit PIN" required>
+      </div>
+      <div class="field">
+        <label class="flabel">Health Facility Registry (HFR) ID <span style="color:var(--muted);font-weight:400;">(optional — most facilities don't have one yet)</span></label>
+        <input type="text" id="hfrId">
+      </div>
     </div>
     <div class="field"><label class="flabel">ROHINI ID <span class="req">*</span></label><input type="text" id="rohiniId" required></div>
 
@@ -314,18 +361,24 @@
       <div class="field"><label class="flabel">Designation <span class="req">*</span></label><input type="text" id="designation" required></div>
     </div>
     <div class="grid2">
-      <div class="field"><label class="flabel">Email ID <span class="req">*</span></label><input type="email" id="email" required></div>
-      <div class="field"><label class="flabel">Mobile Number <span class="req">*</span></label><input type="tel" id="mobile" required></div>
+      <div class="field">
+        <label class="flabel">Email ID <span class="req">*</span></label>
+        <input type="email" id="email" placeholder="name@hospitalname.com" required>
+      </div>
+      <div class="field">
+        <label class="flabel">Mobile Number <span class="req">*</span></label>
+        <input type="tel" id="mobile" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number" required>
+      </div>
     </div>
 
     <div class="btn-row">
-      <button type="button" class="btn btn-secondary" data-back="2">← Back</button>
-      <button type="button" class="btn btn-primary" data-next="4">Continue →</button>
+      <button type="button" class="btn btn-secondary" data-back="3">← Back</button>
+      <button type="button" class="btn btn-primary" data-next="5">Continue →</button>
     </div>
   </div>
 
-  <!-- STEP 4: Section II Capability (dynamic) -->
-  <div class="card step hidden" data-step="4">
+  <!-- STEP 5: Section II Capability (dynamic) -->
+  <div class="card step hidden" data-step="5">
     <div class="step-title">Section II <span class="weight-chip">40 pts</span></div>
     <div class="step-heading">Capability</div>
     <div class="step-desc">Tailored to your selected facility type. Each facility type's sub-parameters sum independently to 40, so scores stay comparable across types.</div>
@@ -334,49 +387,85 @@
     </div>
     <div id="capabilityContainer"></div>
     <div class="btn-row">
-      <button type="button" class="btn btn-secondary" data-back="3">← Back</button>
-      <button type="button" class="btn btn-primary" data-next="5">Continue →</button>
-    </div>
-  </div>
-
-  <!-- STEP 5: Section III Quality & Accreditation -->
-  <div class="card step hidden" data-step="5">
-    <div class="step-title">Section III <span class="weight-chip">35 pts</span></div>
-    <div class="step-heading">Quality &amp; Accreditation</div>
-    <div class="step-desc">NABH / NABL / QCI, infection control, regulatory compliance, and clinical governance.</div>
-    <div id="qualityContainer"></div>
-    <div class="btn-row">
       <button type="button" class="btn btn-secondary" data-back="4">← Back</button>
       <button type="button" class="btn btn-primary" data-next="6">Continue →</button>
     </div>
   </div>
 
-  <!-- STEP 6: Section IV Geography -->
+  <!-- STEP 6: Section III Quality & Accreditation -->
   <div class="card step hidden" data-step="6">
-    <div class="step-title">Section IV <span class="weight-chip">15 pts</span></div>
-    <div class="step-heading">Location / Geography</div>
-    <div class="step-desc">Also applied by insurers as a separate contract rate-band adjustment (Metro to Rural/Remote), outside this scored dimension.</div>
-    <div id="geoContainer"></div>
+    <div class="step-title">Section III <span class="weight-chip">35 pts</span></div>
+    <div class="step-heading">Quality &amp; Accreditation</div>
+    <div class="step-desc">NABH / NABL / QCI, infection control, clinical governance, and patient safety monitoring.</div>
+    <div id="qualityContainer"></div>
     <div class="btn-row">
       <button type="button" class="btn btn-secondary" data-back="5">← Back</button>
       <button type="button" class="btn btn-primary" data-next="7">Continue →</button>
     </div>
   </div>
 
-  <!-- STEP 7: Section V Digital Maturity -->
+  <!-- STEP 7: Section IV Geography -->
   <div class="card step hidden" data-step="7">
-    <div class="step-title">Section V <span class="weight-chip">10 pts</span></div>
-    <div class="step-heading">Technology Adoption &amp; Digital Maturity</div>
-    <div class="step-desc">HMIS and ABDM / NHCX readiness.</div>
-    <div id="digitalContainer"></div>
+    <div class="step-title">Section IV <span class="weight-chip">15 pts</span></div>
+    <div class="step-heading">Location / Geography</div>
+    <div class="step-desc">Also applied by insurers as a separate contract rate-band adjustment (Metro to Rural/Remote), outside this scored dimension.</div>
+    <div id="geoContainer"></div>
+    <div id="geoReference"></div>
     <div class="btn-row">
       <button type="button" class="btn btn-secondary" data-back="6">← Back</button>
       <button type="button" class="btn btn-primary" data-next="8">Continue →</button>
     </div>
   </div>
 
-  <!-- STEP 8: Section VI Declaration -->
+  <!-- STEP 8: Section V Digital Maturity -->
   <div class="card step hidden" data-step="8">
+    <div class="step-title">Section V <span class="weight-chip">10 pts</span></div>
+    <div class="step-heading">Technology Adoption &amp; Digital Maturity</div>
+    <div class="step-desc">HMIS and ABDM / NHCX readiness.</div>
+    <div id="digitalContainer"></div>
+    <div class="btn-row">
+      <button type="button" class="btn btn-secondary" data-back="7">← Back</button>
+      <button type="button" class="btn btn-primary" data-next="9">Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 9: Supporting Document Upload (before Declaration) -->
+  <div class="card step hidden" data-step="9">
+    <div class="step-title">Before Declaration</div>
+    <div class="step-heading">Supporting Document Upload</div>
+    <div class="step-desc">Upload scanned copies (PDF or image, max 4MB each) of the documents below so the Working Group can verify what has been submitted. Files are stored on Google Drive and are not made public.</div>
+
+    <div class="field">
+      <label class="flabel">1. CEA / State Licence or Nursing Home / Medical Establishment Licence <span class="req">*</span></label>
+      <input type="file" id="docCEA" accept=".pdf,.jpg,.jpeg,.png">
+    </div>
+    <div class="field">
+      <label class="flabel">2. Local Body NOC / Trade Licence <span class="req">*</span></label>
+      <input type="file" id="docNOC" accept=".pdf,.jpg,.jpeg,.png">
+    </div>
+    <div class="field">
+      <label class="flabel">3. NABH / NABL / QCI Accreditation Certificate <span style="color:var(--muted);font-weight:400;">(if held)</span></label>
+      <input type="file" id="docAccreditation" accept=".pdf,.jpg,.jpeg,.png">
+    </div>
+    <div class="field">
+      <label class="flabel">4. Fire NOC / PCB Clearance <span style="color:var(--muted);font-weight:400;">(if applicable)</span></label>
+      <input type="file" id="docFireNOC" accept=".pdf,.jpg,.jpeg,.png">
+    </div>
+    <div class="field">
+      <label class="flabel">5. Health Facility Registry (HFR) ID Proof <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
+      <input type="file" id="docHFR" accept=".pdf,.jpg,.jpeg,.png">
+    </div>
+
+    <div id="docUploadStatus" class="banner-note hidden"></div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-secondary" data-back="8">← Back</button>
+      <button type="button" class="btn btn-primary" id="docContinueBtn">Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 10: Section VI Declaration -->
+  <div class="card step hidden" data-step="10">
     <div class="step-title">Section VI · Not Scored</div>
     <div class="step-heading">Declaration</div>
     <div class="step-desc">For contracting and network mapping only — not used in categorisation scoring.</div>
@@ -411,7 +500,7 @@
       <div style="margin-top:8px;"><input type="text" id="disciplinarySpecify" placeholder="If yes, please specify"></div>
     </div>
 
-    <div class="field"><label class="flabel">5. CRISIL Score for the Promoter / MD</label><input type="text" id="crisilScore"></div>
+    <div class="field"><label class="flabel">5. CRISIL Score for the Enterprise</label><input type="text" id="crisilScore"></div>
 
     <div class="field">
       <label class="flabel">6. Online Patient Services Feedback Mechanism</label>
@@ -429,15 +518,15 @@
     </div>
 
     <div class="btn-row">
-      <button type="button" class="btn btn-secondary" data-back="7">← Back</button>
+      <button type="button" class="btn btn-secondary" data-back="9">← Back</button>
       <button type="button" class="btn btn-primary" id="submitBtn">Submit &amp; View Score →</button>
     </div>
   </div>
 
   </form>
 
-  <!-- STEP 9: Score Card -->
-  <div class="card step hidden" data-step="9" id="scoreCardStep">
+  <!-- STEP 11: Score Card -->
+  <div class="card step hidden" data-step="11" id="scoreCardStep">
     <div class="step-title">Result</div>
     <div class="step-heading">Categorisation Score Card</div>
     <div class="score-hero">
@@ -508,38 +597,41 @@ const BAND_RULES = [
 
 // ---- Section III: Quality & Accreditation (35 pts) — PPT slide 15 / docx §III ----
 const QUALITY_SUBPARAMS = [
-  { id:"accreditation", name:"Valid accreditation held (NABH / NABL / QCI per facility type)", cap:12, options:[
-    {label:"None / not accredited", pts:0},
-    {label:"Entry-level NABH / NABL or QCI recommendation", pts:4},
-    {label:"Full NABH / Full NABL", pts:9},
-    {label:"Full NABH / NABL + JCI or international (ISQua)", pts:12},
-  ]},
-  { id:"infectionControl", name:"Infection control measures", cap:8, options:[
+  { id:"accreditation", name:"Valid accreditation held", cap:12, options:[
     {label:"None", pts:0},
-    {label:"Basic BMW compliance", pts:2},
-    {label:"AMSP only", pts:4},
-    {label:"AMSP + HAI tracking", pts:6},
-    {label:"Comprehensive IPC systems", pts:8},
+    {label:"Entry-Level NABH", pts:4},
+    {label:"Entry-Level NABH + NABL", pts:6},
+    {label:"Full NABH + NABL accreditation", pts:11},
+    {label:"Full NABH + NABL + JCI accreditation", pts:12},
   ]},
-  { id:"regulatoryCompliance", name:"Regulatory compliance (licence to operate)", cap:8, options:[
-    {label:"No licence / invalid registration", pts:0},
-    {label:"Applied for renewal / temporary permit", pts:2},
-    {label:"Active State / Municipal registration", pts:4},
-    {label:"Licence + Fire NOC + PCB clearance", pts:5},
-    {label:"All equipment licences (PCPNDT, AERB)", pts:7},
-    {label:"Zero-deficiency status", pts:8},
+  { id:"infectionControl", name:"Infection control measures", cap:10, options:[
+    {label:"No structured infection-control programme", pts:0},
+    {label:"Structured (HIC) with physical records", pts:2},
+    {label:"Structured (HIC) with digital records", pts:4},
+    {label:"+ IPHS-compliant HAI surveillance", pts:8},
+    {label:"Full NABH-standard Prevention & Control of Infection (PCI) programme", pts:10},
   ]},
-  { id:"clinicalGovernance", name:"Clinical governance", cap:7, options:[
+  { id:"clinicalGovernance", name:"Clinical governance (institutional committee structure for reviewing clinical quality — mortality review, clinical audit, quality/patient-safety committees, dashboard)", cap:7, options:[
     {label:"No committees", pts:0},
-    {label:"Mortality review only", pts:2},
-    {label:"Clinical audit committee", pts:3},
-    {label:"Clinical audit + quality committee", pts:5},
-    {label:"Audit + quality + patient-safety committee", pts:6},
-    {label:"Full governance + dashboard reporting", pts:7},
+    {label:"Mortality review only — physical records", pts:1},
+    {label:"Mortality review only — digital records", pts:2},
+    {label:"+ Clinical audit committee — physical records", pts:3},
+    {label:"+ Clinical audit committee — digital records", pts:4},
+    {label:"+ Quality committee — physical records", pts:4},
+    {label:"+ Quality committee — digital records", pts:5},
+    {label:"+ Patient-safety committee — physical records", pts:5},
+    {label:"Full governance structure — patient-safety committee, digital records", pts:7},
+  ]},
+  { id:"patientSafety", name:"Patient Safety & Outcome Monitoring", cap:6, options:[
+    {label:"No formal review", pts:0},
+    {label:"Informal incident review", pts:2},
+    {label:"Structured adverse-event reporting", pts:4},
+    {label:"+ RCA closed-loop", pts:5},
+    {label:"+ validated PROMs/PREMs", pts:6},
   ]},
 ];
 
-// ---- Section IV: Geography (15 pts) — PPT slide 16 ----
+// ---- Section IV: Geography (15 pts) — PPT slide 21 ----
 const GEO_OPTIONS = [
   {label:"Metro", pts:15},
   {label:"Tier-I", pts:13},
@@ -547,21 +639,73 @@ const GEO_OPTIONS = [
   {label:"Tier-III / Rural / Remote", pts:8},
 ];
 
+// ---- Geography reference table — illustrative cities & source anchor, PPT slide 22 ----
+const GEO_REFERENCE = [
+  { tier:"Metro (15 pts)", def:"The 8 X-class HRA cities", cities:"Delhi NCR, Mumbai, Kolkata, Chennai, Bengaluru, Hyderabad, Pune, Ahmedabad", source:"Ministry of Finance HRA notification, effective FY 2026-27" },
+  { tier:"Tier-I (13 pts)", def:"Y-class HRA cities with Census 2011 UA population ≥ 1 million", cities:"Jaipur, Lucknow, Surat, Nagpur, Indore, Bhopal, Coimbatore, Kochi, Chandigarh, Vadodara, Visakhapatnam, Patna", source:"Ministry of Finance Y-class list, cross-checked to Census 2011 UA population" },
+  { tier:"Tier-II (10 pts)", def:"Remaining Y-class HRA cities (Census UA population 1,00,000–9,99,999)", cities:"e.g., Dehradun, Ranchi, Raipur, Jodhpur, Guwahati, Mysuru, Amritsar", source:"Ministry of Finance Y-class list" },
+  { tier:"Tier-III / Rural / Remote (8 pts)", def:"All Z-class HRA locations; includes NITI Aayog-notified Aspirational Districts", cities:"All towns/villages not separately notified as X or Y class", source:"Ministry of Finance Z-class residual category; NITI Aayog Aspirational Districts Programme" },
+];
+
+// ---- India State/District list (source: community-maintained dataset,
+// patched for J&K/Ladakh split, DNH+DD merger, A&N Islands, and AP's
+// current 26-district structure) — used to populate the State/District
+// dropdowns in Section I ----
+const STATE_DISTRICTS = {
+  "Andaman and Nicobar Islands (UT)": ["Nicobar", "North and Middle Andaman", "South Andaman"],
+  "Andhra Pradesh": ["Alluri Sitharama Raju", "Anakapalli", "Anantapur", "Annamayya", "Bapatla", "Chittoor", "East Godavari", "Eluru", "Guntur", "Kakinada", "Konaseema", "Krishna", "Kurnool", "NTR", "Nandyal", "Palnadu", "Parvathipuram Manyam", "Prakasam", "Sri Potti Sriramulu Nellore", "Sri Sathya Sai", "Srikakulam", "Tirupati", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
+  "Arunachal Pradesh": ["Anjaw", "Changlang", "Dibang Valley", "East Kameng", "East Siang", "Kra Daadi", "Kurung Kumey", "Lohit", "Longding", "Lower Dibang Valley", "Lower Siang", "Lower Subansiri", "Namsai", "Papum Pare", "Siang", "Tawang", "Tirap", "Upper Siang", "Upper Subansiri", "West Kameng", "West Siang"],
+  "Assam": ["Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Dima Hasao", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong"],
+  "Bihar": ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran (Motihari)", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur (Bhabua)", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger (Monghyr)", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia (Purnea)", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
+  "Chandigarh (UT)": ["Chandigarh"],
+  "Chhattisgarh": ["Balod", "Baloda Bazar", "Balrampur", "Bastar", "Bemetara", "Bijapur", "Bilaspur", "Dantewada (South Bastar)", "Dhamtari", "Durg", "Gariyaband", "Janjgir-Champa", "Jashpur", "Kabirdham (Kawardha)", "Kanker (North Bastar)", "Kondagaon", "Korba", "Korea (Koriya)", "Mahasamund", "Mungeli", "Narayanpur", "Raigarh", "Raipur", "Rajnandgaon", "Sukma", "Surajpur", "Surguja"],
+  "Dadra and Nagar Haveli and Daman and Diu (UT)": ["Dadra & Nagar Haveli", "Daman", "Diu"],
+  "Delhi (NCT)": ["Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"],
+  "Goa": ["North Goa", "South Goa"],
+  "Gujarat": ["Ahmedabad", "Amreli", "Anand", "Aravalli", "Banaskantha (Palanpur)", "Bharuch", "Bhavnagar", "Botad", "Chhota Udepur", "Dahod", "Dangs (Ahwa)", "Devbhoomi Dwarka", "Gandhinagar", "Gir Somnath", "Jamnagar", "Junagadh", "Kachchh", "Kheda (Nadiad)", "Mahisagar", "Mehsana", "Morbi", "Narmada (Rajpipla)", "Navsari", "Panchmahal (Godhra)", "Patan", "Porbandar", "Rajkot", "Sabarkantha (Himmatnagar)", "Surat", "Surendranagar", "Tapi (Vyara)", "Vadodara", "Valsad"],
+  "Haryana": ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurgaon", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Mewat", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
+  "Himachal Pradesh": ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kinnaur", "Kullu", "Lahaul &amp; Spiti", "Mandi", "Shimla", "Sirmaur (Sirmour)", "Solan", "Una"],
+  "Jammu and Kashmir (UT)": ["Anantnag", "Bandipora", "Baramulla", "Budgam", "Doda", "Ganderbal", "Jammu", "Kathua", "Kishtwar", "Kulgam", "Kupwara", "Poonch", "Pulwama", "Rajouri", "Ramban", "Reasi", "Samba", "Shopian", "Srinagar", "Udhampur"],
+  "Jharkhand": ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribag", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahibganj", "Seraikela-Kharsawan", "Simdega", "West Singhbhum"],
+  "Karnataka": ["Bagalkot", "Ballari (Bellary)", "Belagavi (Belgaum)", "Bengaluru (Bangalore) Rural", "Bengaluru (Bangalore) Urban", "Bidar", "Chamarajanagar", "Chikballapur", "Chikkamagaluru (Chikmagalur)", "Chitradurga", "Dakshina Kannada", "Davangere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi (Gulbarga)", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru (Mysore)", "Raichur", "Ramanagara", "Shivamogga (Shimoga)", "Tumakuru (Tumkur)", "Udupi", "Uttara Kannada (Karwar)", "Vijayapura (Bijapur)", "Yadgir"],
+  "Kerala": ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"],
+  "Ladakh (UT)": ["Kargil", "Leh"],
+  "Lakshadweep (UT)": ["Agatti", "Amini", "Androth", "Bithra", "Chethlath", "Kadmath", "Kalpeni", "Kavaratti", "Kilthan", "Minicoy"],
+  "Madhya Pradesh": ["Agar Malwa", "Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind", "Bhopal", "Burhanpur", "Chhatarpur", "Chhindwara", "Damoh", "Datia", "Dewas", "Dhar", "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad", "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur", "Neemuch", "Panna", "Raisen", "Rajgarh", "Ratlam", "Rewa", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"],
+  "Maharashtra": ["Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban", "Nagpur", "Nanded", "Nandurbar", "Nashik", "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"],
+  "Manipur": ["Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West", "Jiribam", "Kakching", "Kamjong", "Kangpokpi", "Noney", "Pherzawl", "Senapati", "Tamenglong", "Tengnoupal", "Thoubal", "Ukhrul"],
+  "Meghalaya": ["East Garo Hills", "East Jaintia Hills", "East Khasi Hills", "North Garo Hills", "Ri Bhoi", "South Garo Hills", "South West Garo Hills", "South West Khasi Hills", "West Garo Hills", "West Jaintia Hills", "West Khasi Hills"],
+  "Mizoram": ["Aizawl", "Champhai", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saiha", "Serchhip"],
+  "Nagaland": ["Dimapur", "Kiphire", "Kohima", "Longleng", "Mokokchung", "Mon", "Peren", "Phek", "Tuensang", "Wokha", "Zunheboto"],
+  "Odisha": ["Angul", "Balangir", "Balasore", "Bargarh", "Bhadrak", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Gajapati", "Ganjam", "Jagatsinghapur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Kendujhar (Keonjhar)", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Sonepur", "Sundargarh"],
+  "Puducherry (UT)": ["Karaikal", "Mahe", "Pondicherry", "Yanam"],
+  "Punjab": ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Fazilka", "Ferozepur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga", "Muktsar", "Nawanshahr (Shahid Bhagat Singh Nagar)", "Pathankot", "Patiala", "Rupnagar", "Sahibzada Ajit Singh Nagar (Mohali)", "Sangrur", "Tarn Taran"],
+  "Rajasthan": ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bharatpur", "Bhilwara", "Bikaner", "Bundi", "Chittorgarh", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jalore", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Sri Ganganagar", "Tonk", "Udaipur"],
+  "Sikkim": ["East Sikkim", "North Sikkim", "South Sikkim", "West Sikkim"],
+  "Tamil Nadu": ["Ariyalur", "Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kanchipuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivaganga", "Thanjavur", "Theni", "Thoothukudi (Tuticorin)", "Tiruchirappalli", "Tirunelveli", "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", "Viluppuram", "Virudhunagar"],
+  "Telangana": ["Adilabad", "Bhadradri Kothagudem", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar Bhoopalpally", "Jogulamba Gadwal", "Kamareddy", "Karimnagar", "Khammam", "Komaram Bheem Asifabad", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal", "Nagarkurnool", "Nalgonda", "Nirmal", "Nizamabad", "Peddapalli", "Rajanna Sircilla", "Rangareddy", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Wanaparthy", "Warangal (Rural)", "Warangal (Urban)", "Yadadri Bhuvanagiri"],
+  "Tripura": ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
+  "Uttar Pradesh": ["Agra", "Aligarh", "Allahabad", "Ambedkar Nagar", "Amethi (Chatrapati Sahuji Mahraj Nagar)", "Amroha (J.P. Nagar)", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bhadohi", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddha Nagar", "Ghaziabad", "Ghazipur", "Gonda", "Gorakhpur", "Hamirpur", "Hapur (Panchsheel Nagar)", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur Dehat", "Kanpur Nagar", "Kanshiram Nagar (Kasganj)", "Kaushambi", "Kushinagar (Padrauna)", "Lakhimpur - Kheri", "Lalitpur", "Lucknow", "Maharajganj", "Mahoba", "Mainpuri", "Mathura", "Mau", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pilibhit", "Pratapgarh", "RaeBareli", "Rampur", "Saharanpur", "Sambhal (Bhim Nagar)", "Sant Kabir Nagar", "Shahjahanpur", "Shamali (Prabuddh Nagar)", "Shravasti", "Siddharth Nagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
+  "Uttarakhand": ["Almora", "Bageshwar", "Chamoli", "Champawat", "Dehradun", "Haridwar", "Nainital", "Pauri Garhwal", "Pithoragarh", "Rudraprayag", "Tehri Garhwal", "Udham Singh Nagar", "Uttarkashi"],
+  "West Bengal": ["Alipurduar", "Bankura", "Birbhum", "Burdwan (Bardhaman)", "Cooch Behar", "Dakshin Dinajpur (South Dinajpur)", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Kalimpong", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "Paschim Medinipur (West Medinipur)", "Purba Medinipur (East Medinipur)", "Purulia", "South 24 Parganas", "Uttar Dinajpur (North Dinajpur)"],
+};
+
+
 // ---- Section V: Digital Maturity (10 pts) — PPT slide 17 / docx §V ----
 const DIGITAL_SUBPARAMS = [
   { id:"hmis", name:"Hospital Management Information System (HMIS)", cap:5, options:[
-    {label:"Paper based", pts:0},
-    {label:"Ad-hoc / billing-driven", pts:1},
-    {label:"Basic centralised HIS", pts:2},
-    {label:"Advanced clinical automation", pts:4},
-    {label:"Fully integrated + operational", pts:5},
+    {label:"Paper based", pts:1},
+    {label:"Ad-hoc / billing-driven", pts:2},
+    {label:"Basic centralised HIS", pts:3},
+    {label:"Advanced automation", pts:4},
+    {label:"Fully integrated", pts:5},
   ]},
-  { id:"abdmNhcx", name:"ABDM / NHCX status", cap:5, options:[
+  { id:"abdmNhcx", name:"ABDM / NHCX status / NABH DHS", cap:5, options:[
     {label:"Not registered", pts:0},
     {label:"HFR ID obtained", pts:1},
     {label:"ABDM-compliant software", pts:2},
     {label:"ABHA-linked records", pts:4},
-    {label:"NHCX-onboarded (paperless-cashless)", pts:5},
+    {label:"HCX-onboarded", pts:5},
   ]},
 ];
 
@@ -569,90 +713,102 @@ const DIGITAL_SUBPARAMS = [
 // multi / super / small — PPT (primary base document)
 // single-specialty subtypes + diagnostic — docx v2.1 (used only for these)
 const CAPABILITY = {
-  multi: { label:"Multi-Specialty (<4 common specialities)", source:"PPT", subparams:[
-    { id:"emergencyCriticalCare", name:"Emergency & critical care", cap:12, options:[
-      {label:"No structured ICU", pts:0}, {label:"Emergency only, no ICU", pts:3},
-      {label:"Emergency + OT, no ICU", pts:6}, {label:"Emergency + OT + ICU", pts:9},
-      {label:"Full ICU/HDU + multi-OT + CSSD + blood bank", pts:12},
+  multi: { label:"Multi-Specialty (<4 common specialities)", source:"PPT Revised Aug 2026", subparams:[
+    { id:"emergency", name:"Emergency", cap:5, options:[
+      {label:"Dedicated, clearly marked Casualty/Emergency room with basic stabilisation equipment (oxygen, suction, crash cart)", pts:1},
+      {label:"+ Emergency area with separate examination beds and a dedicated minor procedure room", pts:2},
+      {label:"+ Dedicated triage beds within the emergency zone", pts:3},
+      {label:"+ Dedicated emergency/minor OT within or adjacent to the emergency zone", pts:4},
+      {label:"Comprehensive complex seamlessly connected to a fully zoned, functional OT Complex for life-saving surgeries", pts:5},
     ]},
-    { id:"functionalBeds", name:"Functional beds", cap:10, options:[
-      {label:"Less than 30", pts:2}, {label:"30–50", pts:4}, {label:"50–100", pts:6},
-      {label:"100–200", pts:8}, {label:"More than 200", pts:10},
+    { id:"criticalCare", name:"Critical care", cap:5, options:[
+      {label:"Dedicated High-Dependency Unit (HDU) or step-down area, physically separate from general wards", pts:1},
+      {label:"ICU beds equipped with continuous central monitoring and 24/7 piped oxygen with automated backup", pts:3},
+      {label:"ICU equipped with mechanical ventilators, ABG machines, and dedicated infusion pumps for every bed", pts:4},
+      {label:"Advanced critical care suite with negative-pressure isolation beds, CRRT readiness, and 100% power redundancy", pts:5},
     ]},
-    { id:"bedOccupancy", name:"Bed occupancy rate (trailing 12 months)", cap:5, options:[
-      {label:"Below 40%", pts:1}, {label:"40–60%", pts:2}, {label:"60–75%", pts:3},
-      {label:"75–85%", pts:4}, {label:"Above 85%", pts:5},
+    { id:"diagnosticSupport", name:"Diagnostic & Support Services Capability", cap:10, options:[
+      {label:"Below basic diagnostic capability", pts:0},
+      {label:"Basic non-NABL lab + X-ray/USG", pts:3},
+      {label:"NABL lab + USG + basic imaging", pts:6},
+      {label:"+ CT in-house", pts:8},
+      {label:"+ blood bank + 24×7 pharmacy", pts:10},
     ]},
-    { id:"nurseDoctorRatio", name:"Nurse-to-bed / doctor-to-bed ratio", cap:5, options:[
-      {label:"Below statutory minimum", pts:0}, {label:"Meets statutory minimum only", pts:2},
-      {label:"Above minimum on either nursing or medical staffing", pts:4},
-      {label:"Above minimum on both nursing and medical staffing", pts:6},
+    { id:"functionalBeds", name:"Functional beds", cap:6, options:[
+      {label:"Less than 30", pts:2}, {label:"30–50", pts:4}, {label:"50–100", pts:5}, {label:"100–200", pts:6},
     ]},
-    { id:"clinicalOutcomes", name:"Clinical outcome indicators (HAI, readmission, mortality)", cap:5, options:[
-      {label:"Not tracked", pts:0}, {label:"Tracked & benchmarked", pts:4},
-      {label:"Tracked & benchmarked + shared with payors", pts:5},
+    { id:"nurseDoctorRatio", name:"Nurse-to-bed / doctor-to-bed ratio", cap:6, options:[
+      {label:"Meets minimum", pts:2}, {label:"Above on one", pts:4}, {label:"Above on both", pts:6},
     ]},
-    { id:"teachingStatus", name:"Teaching / training status", cap:3, options:[
-      {label:"None", pts:0}, {label:"Nursing / allied-health training affiliation", pts:1},
-      {label:"DNB / Fellowship — more than 3 seats", pts:3},
+    { id:"teachingStatus", name:"Teaching / training status", cap:4, options:[
+      {label:"None", pts:0}, {label:"Nursing / allied-health affiliation", pts:2},
+      {label:"DNB / Fellowship — more than 3", pts:4},
+    ]},
+    { id:"clinicalOutcomes", name:"Clinical outcome indicators (HAI, readmission, morbidity and mortality records)", cap:4, options:[
+      {label:"Not tracked", pts:0}, {label:"Tracked as per NABH", pts:4},
     ]},
   ]},
 
-  super: { label:"Super-Specialty Chain of Hospitals", source:"PPT", subparams:[
+  super: { label:"Super-Specialty Chain of Hospitals", source:"PPT Revised Aug 2026", subparams:[
     { id:"emergencyCriticalCare", name:"Emergency & critical care", cap:10, options:[
-      {label:"No structured ICU", pts:0}, {label:"Emergency only, no ICU", pts:3},
-      {label:"Emergency + OT, no ICU", pts:5}, {label:"Emergency + OT + ICU", pts:8},
-      {label:"Full critical-care suite", pts:10},
+      {label:"No structured emergency/ICU services", pts:0},
+      {label:"Emergency only", pts:3},
+      {label:"+ OT Complex", pts:5},
+      {label:"+ ICU", pts:8},
+      {label:"Full critical-care suite (ICU/HDU + multi-OT + CSSD + blood bank)", pts:10},
     ]},
-    { id:"functionalBeds", name:"Functional beds", cap:8, options:[
-      {label:"Less than 100", pts:1}, {label:"100–200", pts:3}, {label:"200–350", pts:5},
-      {label:"350–500", pts:7}, {label:"More than 500", pts:8},
+    { id:"diagnosticSupport", name:"Diagnostic & Support Services Capability", cap:10, options:[
+      {label:"Below basic diagnostic capability", pts:0},
+      {label:"NABL lab + X-ray/USG", pts:4},
+      {label:"+ CT/MRI in-house", pts:6},
+      {label:"+ blood bank + 24×7 pharmacy", pts:8},
+      {label:"Full suite: NABL lab + CT/MRI + cath lab/interventional radiology + blood bank + 24×7 pharmacy", pts:10},
     ]},
-    { id:"bedOccupancy", name:"Bed occupancy rate (trailing 12 months)", cap:6, options:[
-      {label:"Below 40%", pts:2}, {label:"40–60%", pts:3}, {label:"60–80%", pts:5}, {label:"Above 80%", pts:6},
+    { id:"functionalBeds", name:"Functional beds", cap:6, options:[
+      {label:"Less than 100", pts:2}, {label:"100–200", pts:3}, {label:"200–350", pts:4},
+      {label:"350–500", pts:5}, {label:"More than 500", pts:6},
     ]},
     { id:"specialtyScope", name:"Specialty scope (DNB / Fellowship seats)", cap:6, options:[
-      {label:"None", pts:0}, {label:"Up to 2 specialties", pts:3}, {label:"Up to 4 specialties", pts:4},
-      {label:"Up to 6 specialties", pts:5}, {label:"More than 6", pts:6},
+      {label:"None", pts:0}, {label:"Up to 2 specialties", pts:2}, {label:"Up to 4 specialties", pts:4},
+      {label:"6 or more specialties", pts:6},
     ]},
-    { id:"nurseDoctorRatio", name:"Nurse-to-bed / doctor-to-bed ratio", cap:5, options:[
-      {label:"Below statutory minimum", pts:0}, {label:"Meets statutory minimum only", pts:2},
-      {label:"Above minimum on either nursing or medical staffing", pts:3},
-      {label:"Above minimum on both nursing and medical staffing", pts:5},
+    { id:"nurseDoctorRatio", name:"Nurse-to-bed / doctor-to-bed ratio", cap:4, options:[
+      {label:"Meets minimum", pts:2}, {label:"Above on one", pts:3}, {label:"Above on both", pts:4},
     ]},
-    { id:"clinicalOutcomes", name:"Clinical outcome indicators (HAI, readmission, mortality)", cap:5, options:[
-      {label:"Not tracked", pts:0}, {label:"Tracked & benchmarked", pts:4},
-      {label:"Tracked & benchmarked + shared with payors", pts:5},
+    { id:"clinicalOutcomes", name:"Clinical outcome indicators (HAI, readmission, morbidity and mortality records)", cap:4, options:[
+      {label:"Not tracked", pts:0}, {label:"Tracked as per NABH", pts:4},
     ]},
   ]},
 
-  small: { label:"Small Hospitals (nursing homes, etc.)", source:"PPT", subparams:[
-    { id:"emergencyCriticalCare", name:"Emergency & critical care", cap:12, options:[
-      {label:"No structured ICU", pts:0}, {label:"Emergency only, no ICU", pts:3},
-      {label:"Emergency + OT, no ICU", pts:6}, {label:"Emergency + OT + ICU", pts:9},
-      {label:"Full ICU/HDU + multi-OT + CSSD + blood bank", pts:12},
+  small: { label:"Small Hospitals", source:"PPT Revised Aug 2026", subparams:[
+    { id:"emergencyCriticalCare", name:"Emergency & critical care", cap:10, options:[
+      {label:"No structured ICU", pts:0},
+      {label:"Emergency stabilisation only", pts:3},
+      {label:"+ OT", pts:6},
+      {label:"+ OT + ICU", pts:8},
+      {label:"Full ICU/HDU + multi-OT + CSSD", pts:10},
     ]},
-    { id:"functionalBeds", name:"Functional beds", cap:10, options:[
-      {label:"Less than 30", pts:2}, {label:"30–50", pts:4}, {label:"50–100", pts:6},
-      {label:"100–200", pts:8}, {label:"More than 200", pts:10},
+    { id:"diagnosticSupport", name:"Diagnostic & Support Services Capability", cap:10, options:[
+      {label:"Basic non-NABL lab + X-ray", pts:2},
+      {label:"+ USG", pts:4},
+      {label:"+ 24×7 pharmacy", pts:6},
+      {label:"NABL-accredited lab", pts:8},
+      {label:"Blood storage unit", pts:10},
     ]},
-    { id:"bedOccupancy", name:"Bed occupancy rate (trailing 12 months)", cap:5, options:[
-      {label:"Below 40%", pts:1}, {label:"40–60%", pts:2}, {label:"60–75%", pts:3},
-      {label:"75–85%", pts:4}, {label:"Above 85%", pts:5},
+    { id:"functionalBeds", name:"Functional beds", cap:6, options:[
+      {label:"Less than 30", pts:2}, {label:"30–50", pts:3}, {label:"51–75", pts:4},
+      {label:"76–100", pts:5}, {label:"More than 100", pts:6},
     ]},
-    { id:"nurseDoctorRatio", name:"Nurse-to-bed / doctor-to-bed ratio", cap:5, options:[
-      {label:"Below statutory minimum", pts:0}, {label:"Meets statutory minimum only", pts:2},
-      {label:"Above minimum on either nursing or medical staffing", pts:4},
-      {label:"Above minimum on both nursing and medical staffing", pts:6},
+    { id:"nurseDoctorRatio", name:"Nurse-to-bed / doctor-to-bed ratio", cap:6, options:[
+      {label:"According to CEA", pts:3}, {label:"According to NABH", pts:6},
     ]},
-    { id:"clinicalOutcomes", name:"Clinical outcome indicators (HAI, readmission, mortality)", cap:4, options:[
-      {label:"Not tracked", pts:0}, {label:"Tracked & benchmarked", pts:4},
-      {label:"Tracked & benchmarked + shared with payors", pts:5},
+    { id:"clinicalOutcomes", name:"Clinical outcome indicators (HAI, readmission, morbidity and mortality records)", cap:4, options:[
+      {label:"Not tracked", pts:0}, {label:"Tracked as per NABH", pts:4},
     ]},
     { id:"standardProtocols", name:"Standard Treatment Protocols", cap:4, options:[
-      {label:"None documented", pts:0}, {label:"Informal / verbal only", pts:2},
-      {label:"Written SOPs for common conditions", pts:4},
-      {label:"Written SOPs + periodic clinical audit", pts:8},
+      {label:"None documented", pts:0},
+      {label:"Written SOPs for common conditions", pts:2},
+      {label:"Written SOPs + periodic clinical audit", pts:4},
     ]},
   ]},
 
@@ -859,8 +1015,7 @@ const FACILITY_TYPES = [
   { key:"multi", icon:"🏥", title:"Multi-Specialty", sub:"Less than 4 common specialities" },
   { key:"super", icon:"🏨", title:"Super-Specialty", sub:"Chain of Hospitals" },
   { key:"small", icon:"🏩", title:"Small Hospitals", sub:"Nursing homes, etc." },
-  { key:"single", icon:"🔬", title:"Single-Specialty", sub:"Oncology · Eye · ENT · AYUSH · Dialysis · IVF · Others" },
-  { key:"diagnostic", icon:"🧪", title:"Standalone Diagnostic / Imaging", sub:"Lab · Imaging · Radiology" },
+  { key:"single", icon:"🔬", title:"Single-Specialty", sub:"Oncology · Eye · ENT · AYUSH · Dialysis · IVF · Others", disabled:true },
 ];
 
 /* =========================================================================
@@ -936,10 +1091,17 @@ function renderBandsTable(){
 const facilityGrid = document.getElementById("facilityGrid");
 FACILITY_TYPES.forEach(ft => {
   const div = document.createElement("div");
-  div.className = "facility-card";
+  div.className = "facility-card" + (ft.disabled ? " disabled" : "");
   div.dataset.key = ft.key;
-  div.innerHTML = `<div class="ficon">${ft.icon}</div><div class="ftitle">${ft.title}</div><div class="fsub">${ft.sub}</div>`;
-  div.addEventListener("click", () => selectFacilityType(ft.key));
+  const badge = ft.disabled ? `<div class="fbadge">Coming soon</div>` : "";
+  div.innerHTML = `<div class="ficon">${ft.icon}</div><div class="ftitle">${ft.title}</div><div class="fsub">${ft.sub}</div>${badge}`;
+  // Disabled cards (Single-Specialty) are inert: the framework is currently
+  // finalised only for Multi-Specialty, Super-Specialty Chain, and Small
+  // Hospitals, so clicking this card does nothing — no selection, no
+  // subtype reveal, no ability to continue.
+  if(!ft.disabled){
+    div.addEventListener("click", () => selectFacilityType(ft.key));
+  }
   facilityGrid.appendChild(div);
 });
 
@@ -948,13 +1110,8 @@ function selectFacilityType(key){
   state.singleSubtype = null;
   document.querySelectorAll(".facility-card").forEach(c => c.classList.toggle("selected", c.dataset.key === key));
   const subtypeWrap = document.getElementById("subtypeWrap");
-  if(key === "single"){
-    subtypeWrap.classList.remove("hidden");
-    renderSubtypeList();
-  } else {
-    subtypeWrap.classList.add("hidden");
-    document.getElementById("othersSpecifyWrap").classList.add("hidden");
-  }
+  subtypeWrap.classList.add("hidden");
+  document.getElementById("othersSpecifyWrap").classList.add("hidden");
 }
 
 function renderSubtypeList(){
@@ -1066,11 +1223,11 @@ function setupQualityAutoScore(container){
   const note = document.createElement("div");
   note.id = "qualAutoScoreNote";
   note.className = "banner-note hidden";
-  note.textContent = "⚡ Full NABH/NABL + JCI or international accreditation auto-selects the top score for Infection Control, Regulatory Compliance and Clinical Governance below. You may override any of them manually.";
+  note.textContent = "⚡ Full NABH/NABL + JCI accreditation auto-selects the top score for Infection Control, Clinical Governance, and Patient Safety & Outcome Monitoring below. You may override any of them manually.";
   const firstBlock = container.querySelector(".subparam");
   firstBlock.insertAdjacentElement("afterend", note);
 
-  const targetIds = ["infectionControl", "regulatoryCompliance", "clinicalGovernance"];
+  const targetIds = ["infectionControl", "clinicalGovernance", "patientSafety"];
 
   topRadio.addEventListener("change", () => {
     if(!topRadio.checked) return;
@@ -1094,7 +1251,7 @@ function setupQualityAutoScore(container){
 }
 
 /* =========================================================================
-   RENDER: Geography (Section IV)
+   RENDER: Geography (Section IV) — manual tier selection
    ========================================================================= */
 function renderGeoSection(){
   const container = document.getElementById("geoContainer");
@@ -1107,13 +1264,81 @@ function renderGeoSection(){
     row.className = "opt-row";
     row.innerHTML = `<input type="radio" name="geo_tier" value="${opt.pts}">
       <span class="opt-label">${opt.label}</span><span class="opt-pts">${opt.pts} pts</span>`;
+    if(state.answers.geography && state.answers.geography.label === opt.label){
+      row.querySelector("input").checked = true;
+    }
     row.querySelector("input").addEventListener("change", () => {
       state.answers.geography = { pts: opt.pts, label: opt.label };
     });
     div.appendChild(row);
   });
   container.appendChild(div);
+  renderGeoReference();
 }
+
+function renderGeoReference(){
+  const wrap = document.getElementById("geoReference");
+  wrap.innerHTML = `<div class="section-heading-sm" style="margin-top:18px;">Tier Reference — Illustrative Cities</div>`;
+  const table = document.createElement("table");
+  table.className = "bands-table";
+  table.innerHTML = `<thead><tr><th>Band</th><th>Definition</th><th>Illustrative Cities</th></tr></thead>`;
+  const tbody = document.createElement("tbody");
+  GEO_REFERENCE.forEach(g => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${g.tier}</td><td>${g.def}</td><td>${g.cities}</td>`;
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+}
+
+function populateStateDropdown(){
+  const stateSel = document.getElementById("state");
+  Object.keys(STATE_DISTRICTS).sort().forEach(s => {
+    const option = document.createElement("option");
+    option.value = s;
+    option.textContent = s;
+    stateSel.appendChild(option);
+  });
+  stateSel.addEventListener("change", () => {
+    const districtSel = document.getElementById("district");
+    districtSel.innerHTML = "";
+    const chosen = stateSel.value;
+    if(!chosen){
+      districtSel.disabled = true;
+      districtSel.innerHTML = `<option value="">Select a state first…</option>`;
+      return;
+    }
+    districtSel.disabled = false;
+    districtSel.innerHTML = `<option value="">Select…</option>`;
+    STATE_DISTRICTS[chosen].forEach(d => {
+      const option = document.createElement("option");
+      option.value = d;
+      option.textContent = d;
+      districtSel.appendChild(option);
+    });
+  });
+}
+populateStateDropdown();
+
+/* ---- Field validators (PIN code, mobile, institutional email) ---- */
+const FREE_EMAIL_DOMAINS = [
+  "gmail.com","yahoo.com","yahoo.co.in","hotmail.com","outlook.com","live.com",
+  "rediffmail.com","ymail.com","icloud.com","aol.com","protonmail.com","gmx.com","msn.com"
+];
+function isValidPinCode(v){ return /^[1-9][0-9]{5}$/.test(v.trim()); }
+function isValidMobile(v){ return /^[6-9][0-9]{9}$/.test(v.trim()); }
+function isInstitutionalEmail(v){
+  const m = v.trim().toLowerCase().match(/@([a-z0-9.-]+)$/);
+  if(!m) return false;
+  return FREE_EMAIL_DOMAINS.indexOf(m[1]) === -1;
+}
+document.getElementById("pinCode").addEventListener("input", e => {
+  e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0,6);
+});
+document.getElementById("mobile").addEventListener("input", e => {
+  e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0,10);
+});
 
 /* =========================================================================
    RENDER: Digital Maturity (Section V)
@@ -1127,7 +1352,7 @@ function renderDigitalSection(){
 /* =========================================================================
    STEP NAVIGATION
    ========================================================================= */
-const STEP_COUNT = 10; // 0..9
+const STEP_COUNT = 12; // 0..11
 function goToStep(n){
   document.querySelectorAll(".step").forEach(el => el.classList.add("hidden"));
   const target = document.querySelector(`.step[data-step="${n}"]`);
@@ -1139,22 +1364,77 @@ function goToStep(n){
   window.scrollTo({top:0, behavior:"smooth"});
 
   if(n === 1){ renderSectionOverview(); renderArchBar(); renderBandsTable(); }
-  if(n === 4) renderCapabilitySection();
-  if(n === 5) renderQualitySection();
-  if(n === 6) renderGeoSection();
-  if(n === 7) renderDigitalSection();
+  if(n === 5) renderCapabilitySection();
+  if(n === 6) renderQualitySection();
+  if(n === 7) renderGeoSection();
+  if(n === 8) renderDigitalSection();
 }
 
 document.getElementById("aboutContinueBtn").addEventListener("click", () => goToStep(1));
 document.getElementById("structureBackBtn").addEventListener("click", () => goToStep(0));
 document.getElementById("structureContinueBtn").addEventListener("click", () => goToStep(2));
-document.getElementById("facilityBackBtn").addEventListener("click", () => goToStep(1));
+
+// STEP 2 -> STEP 3: screening questions gate entry to the questionnaire
+document.getElementById("screeningBackBtn").addEventListener("click", () => goToStep(1));
+document.getElementById("screeningContinueBtn").addEventListener("click", () => {
+  const cea = document.querySelector('input[name="screeningCEA"]:checked');
+  const noc = document.querySelector('input[name="screeningNOC"]:checked');
+  const note = document.getElementById("screeningBlockedNote");
+  if(!cea || !noc){ alert("Please answer both questions to continue."); return; }
+  if(cea.value === "No" || noc.value === "No"){
+    note.classList.remove("hidden");
+    return;
+  }
+  note.classList.add("hidden");
+  goToStep(3);
+});
+
+document.getElementById("facilityBackBtn").addEventListener("click", () => goToStep(2));
 
 document.getElementById("toStep3").addEventListener("click", () => {
   if(!state.facilityType){ alert("Please select a facility type to continue."); return; }
-  if(state.facilityType === "single" && !state.singleSubtype){ alert("Please select a single-specialty sub-type to continue."); return; }
-  if(state.singleSubtype === "others" && !state.othersSpecify.trim()){ alert("Please specify the single-specialty type."); return; }
-  goToStep(3);
+  goToStep(4);
+});
+
+// STEP 9 -> STEP 10: supporting document upload before Declaration
+const DOC_FIELDS = [
+  { id:"docCEA", required:true, label:"CEA / State Licence" },
+  { id:"docNOC", required:true, label:"Local Body NOC / Trade Licence" },
+  { id:"docAccreditation", required:false, label:"Accreditation Certificate" },
+  { id:"docFireNOC", required:false, label:"Fire NOC / PCB Clearance" },
+  { id:"docHFR", required:false, label:"HFR ID Proof" },
+];
+const MAX_DOC_BYTES = 4 * 1024 * 1024;
+state.documents = {};
+
+DOC_FIELDS.forEach(f => {
+  document.getElementById(f.id).addEventListener("change", e => {
+    const file = e.target.files[0];
+    const statusEl = document.getElementById("docUploadStatus");
+    if(!file){ delete state.documents[f.id]; return; }
+    if(file.size > MAX_DOC_BYTES){
+      statusEl.textContent = `⚠ ${f.label}: file exceeds 4MB — please upload a smaller file.`;
+      statusEl.classList.remove("hidden");
+      e.target.value = "";
+      delete state.documents[f.id];
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result.split(",")[1];
+      state.documents[f.id] = { name: file.name, mimeType: file.type || "application/octet-stream", base64 };
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+document.getElementById("docContinueBtn").addEventListener("click", () => {
+  const missing = DOC_FIELDS.filter(f => f.required && !state.documents[f.id]);
+  if(missing.length){
+    alert("Please upload the required document(s): " + missing.map(f => f.label).join(", "));
+    return;
+  }
+  goToStep(10);
 });
 
 document.querySelectorAll("[data-back]").forEach(btn => {
@@ -1163,13 +1443,19 @@ document.querySelectorAll("[data-back]").forEach(btn => {
 document.querySelectorAll("[data-next]").forEach(btn => {
   btn.addEventListener("click", () => {
     const n = parseInt(btn.dataset.next, 10);
-    if(n === 4){
-      // validate Section I required fields
-      const requiredIds = ["facilityName","legalEntityName","ownershipType","regAddress","state","district","pinCode","hfrId","rohiniId","contactPerson","designation","email","mobile"];
+    if(n === 5){
+      // validate Section I required fields (HFR ID is optional)
+      const requiredIds = ["facilityName","legalEntityName","ownershipType","regAddress","state","district","pinCode","rohiniId","contactPerson","designation","email","mobile"];
       for(const id of requiredIds){
         const el = document.getElementById(id);
         if(!el.value.trim()){ el.focus(); alert("Please complete all required fields in Section I."); return; }
       }
+      const pinEl = document.getElementById("pinCode");
+      if(!isValidPinCode(pinEl.value)){ pinEl.focus(); alert("Please enter a valid 6-digit PIN code."); return; }
+      const mobileEl = document.getElementById("mobile");
+      if(!isValidMobile(mobileEl.value)){ mobileEl.focus(); alert("Please enter a valid 10-digit mobile number (starting 6–9)."); return; }
+      const emailEl = document.getElementById("email");
+      if(!isInstitutionalEmail(emailEl.value)){ emailEl.focus(); alert("Please use your hospital/organisation email address — personal Gmail, Yahoo, Hotmail, etc. accounts are not accepted."); return; }
     }
     goToStep(n);
   });
@@ -1205,7 +1491,7 @@ document.getElementById("submitBtn").addEventListener("click", () => {
   }
   const scores = computeScores();
   renderScoreCard(scores);
-  goToStep(9);
+  goToStep(11);
   submitToBackend(scores);
 });
 
@@ -1266,13 +1552,15 @@ function collectPayload(scores){
     designation: val("designation"),
     email: val("email"),
     mobile: val("mobile"),
+    screeningCEA: radioVal("screeningCEA"),
+    screeningNOC: radioVal("screeningNOC"),
     capabilityScore: scores.isOthers ? "Pending Manual Review" : scores.capabilityScore,
     capabilityDetail: buildCapabilityDetail(state.answers.capability),
     qualityScore: scores.qualityScore,
     qualityAccreditation: fmtEntry(state.answers.quality.accreditation),
     qualityInfectionControl: fmtEntry(state.answers.quality.infectionControl),
-    qualityRegulatoryCompliance: fmtEntry(state.answers.quality.regulatoryCompliance),
     qualityClinicalGovernance: fmtEntry(state.answers.quality.clinicalGovernance),
+    qualityPatientSafety: fmtEntry(state.answers.quality.patientSafety),
     geographyScore: scores.geoScore,
     geographyTier: state.answers.geography ? state.answers.geography.label : "",
     digitalScore: scores.digitalScore,
@@ -1289,6 +1577,7 @@ function collectPayload(scores){
     patientFeedback: radioVal("patientFeedback"),
     declarationConfirmed: document.getElementById("declarationConfirm").checked,
     answersDetailJson: JSON.stringify(state.answers),
+    documents: state.documents,
   };
 }
 
