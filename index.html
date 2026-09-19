@@ -203,7 +203,7 @@
 <header class="top">
   <div class="wrap">
     <h1>Categorisation of Healthcare Organisations (HCOs)</h1>
-    <div class="sub">Assessment Framework · Version 2.2 · Working Group 2</div>
+    <div class="sub">Assessment Framework · Version 2.2 · Revised Aug 2026 · CII Working Group 2</div>
   </div>
 </header>
 
@@ -217,7 +217,7 @@
   <div class="card step" data-step="0">
     <div class="step-title">Before you begin</div>
     <div class="step-heading">About this Framework</div>
-    <p class="about-lead">The categorisation assessment is <strong>NOT</strong> intended to rate hospitals, establish clinical rankings, or serve as a public quality assessment mechanism.</p>
+    <p class="about-lead">The categorisation assessment is <strong>not</strong> intended to rate hospitals, establish clinical rankings, or serve as a public quality assessment mechanism.</p>
     <p class="about-lead">The objective of this exercise is to provide a common reference structure that can be used by healthcare providers and insurers for:</p>
     <ul class="about-bullets">
       <li><span class="bnum">1</span><span>Improve trust between Healthcare Providers &amp; Insurers</span></li>
@@ -500,7 +500,7 @@
       <div style="margin-top:8px;"><input type="text" id="disciplinarySpecify" placeholder="If yes, please specify"></div>
     </div>
 
-    <div class="field"><label class="flabel">5. CRISIL Score for the Enterprise</label><input type="text" id="crisilScore"></div>
+    <div class="field"><label class="flabel">5. CRISIL Score for the Promoter / MD</label><input type="text" id="crisilScore"></div>
 
     <div class="field">
       <label class="flabel">6. Online Patient Services Feedback Mechanism</label>
@@ -1321,13 +1321,9 @@ function populateStateDropdown(){
 }
 populateStateDropdown();
 
+/* ---- Field validators (PIN code, mobile) ---- */
 function isValidPinCode(v){ return /^[1-9][0-9]{5}$/.test(v.trim()); }
 function isValidMobile(v){ return /^[6-9][0-9]{9}$/.test(v.trim()); }
-function isInstitutionalEmail(v){
-  const m = v.trim().toLowerCase().match(/@([a-z0-9.-]+)$/);
-  if(!m) return false;
-  return FREE_EMAIL_DOMAINS.indexOf(m[1]) === -1;
-}
 document.getElementById("pinCode").addEventListener("input", e => {
   e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0,6);
 });
@@ -1449,8 +1445,6 @@ document.querySelectorAll("[data-next]").forEach(btn => {
       if(!isValidPinCode(pinEl.value)){ pinEl.focus(); alert("Please enter a valid 6-digit PIN code."); return; }
       const mobileEl = document.getElementById("mobile");
       if(!isValidMobile(mobileEl.value)){ mobileEl.focus(); alert("Please enter a valid 10-digit mobile number (starting 6–9)."); return; }
-      const emailEl = document.getElementById("email");
-      if(!isInstitutionalEmail(emailEl.value)){ emailEl.focus(); alert("Please use your hospital/organisation email address — personal Gmail, Yahoo, Hotmail, etc. accounts are not accepted."); return; }
     }
     goToStep(n);
   });
