@@ -1321,11 +1321,6 @@ function populateStateDropdown(){
 }
 populateStateDropdown();
 
-/* ---- Field validators (PIN code, mobile, institutional email) ---- */
-const FREE_EMAIL_DOMAINS = [
- "live.com",
-  "rediffmail.com","ymail.com","icloud.com","aol.com","protonmail.com","gmx.com","msn.com"
-];
 function isValidPinCode(v){ return /^[1-9][0-9]{5}$/.test(v.trim()); }
 function isValidMobile(v){ return /^[6-9][0-9]{9}$/.test(v.trim()); }
 function isInstitutionalEmail(v){
